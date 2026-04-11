@@ -4,7 +4,7 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   const formData = await request.formData();
   const password = formData.get('password')?.toString() ?? '';
 
-  const adminPassword = import.meta.env.ADMIN_PASSWORD ?? 'admin123';
+  const adminPassword = import.meta.env.ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || 'admin123';
 
   if (password === adminPassword) {
     cookies.set('admin_token', 'authenticated', {
