@@ -1,5 +1,15 @@
 import type { APIRoute } from 'astro';
 
+export const GET: APIRoute = async () => {
+  const fromImportMeta = import.meta.env.ADMIN_PASSWORD;
+  const fromProcessEnv = process.env.ADMIN_PASSWORD;
+  return new Response(JSON.stringify({
+    importMeta: typeof fromImportMeta + ': ' + (fromImportMeta ? '[SET]' : '[EMPTY]'),
+    processEnv: typeof fromProcessEnv + ': ' + (fromProcessEnv ? '[SET]' : '[EMPTY]'),
+    fallbackUsed: !fromImportMeta && !fromProcessEnv,
+  }), { headers: { 'Content-Type': 'application/json' } });
+};
+
 export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   const formData = await request.formData();
   const password = formData.get('password')?.toString() ?? '';
