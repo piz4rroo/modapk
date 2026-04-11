@@ -1,0 +1,275 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getAppBySlug } from '../../../lib/apps';
+
+// Auth check
+const token = Astro.cookies.get('admin_token')?.value;
+if (!token || token !== 'authenticated') {
+  return Astro.redirect('/admin/login');
+}
+
+const { slug } = Astro.params;
+const isNew = slug === 'new';
+
+let app: any = {
+  slug: '',
+  name: '',
+  category: 'games',
+  icon: '',
+  version: '',
+  modInfo: '',
+  size: '',
+  rating: 4.5,
+  developer: '',
+  requires: 'Android 5.0+',
+  downloadUrl: '',
+  shortDescription: '',
+  fullDescription: '',
+  modFeatures: [],
+  screenshots: [],
+};
+
+if (!isNew) {
+  const found = await getAppBySlug(slug);
+  if (!found) {
+    return Astro.redirect('/admin');
+  }
+  app = found;
+}
+
+const title = isNew ? 'Add App - ModVault' : 'Edit App - ModVault';
+const formAction = isNew ? '/api/apps' : `/api/apps/${slug}`;
+---
+
+<BaseLayout title={title}>
+  <div class="max-w-2xl mx-auto px-4 py-10">
+    <h1 class="text-2xl font-bold mb-8">{isNew ? 'Add New App' : `Edit: ${app.name}`}</h1>
+
+    <form method="POST" action={formAction} class="space-y-5">
+      <!-- Name -->
+      <div>
+        <label for="name" class="block text-sm font-medium text-text-secondary mb-1">Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value={app.name}
+          required
+          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        />
+      </div>
+
+      <!-- Slug -->
+      <div>
+        <label for="slug" class="block text-sm font-medium text-text-secondary mb-1">Slug</label>
+        <input
+          type="text"
+          id="slug"
+          name="slug"
+          value={app.slug}
+          required
+          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        />
+      </div>
+
+      <!-- Category -->
+      <div>
+        <label for="category" class="block text-sm font-medium text-text-secondary mb-1">Category</label>
+        <select
+          id="category"
+          name="category"
+          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+        >
+          <option value="games" selected={app.category === 'games'}>Games</option>
+          <option value="apps" selected={app.category === 'apps'}>Apps</option>
+          <option value="tools" selected={app.category === 'tools'}>Tools</option>
+          <option value="social" selected={app.category === 'social'}>Social</option>
+        </select>
+      </div>
+
+      <!-- Icon URL -->
+      <div>
+        <label for="icon" class="block text-sm font-medium text-text-secondary mb-1">Icon URL</label>
+        <input
+          type="text"
+          id="icon"
+          name="icon"
+          value={app.icon}
+          placeholder="/icons/app.webp"
+          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        />
+      </div>
+
+      <!-- Version -->
+      <div>
+        <label for="version" class="block text-sm font-medium text-text-secondary mb-1">Version</label>
+        <input
+          type="text"
+          id="version"
+          name="version"
+          value={app.version}
+          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        />
+      </div>
+
+      <!-- Mod Info -->
+      <div>
+        <label for="modInfo" class="block text-sm font-medium text-text-secondary mb-1">Mod Info</label>
+        <input
+          type="text"
+          id="modInfo"
+          name="modInfo"
+          value={app.modInfo}
+          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        />
+      </div>
+
+      <!-- Size -->
+      <div>
+        <label for="size" class="block text-sm font-medium text-text-secondary mb-1">Size</label>
+        <input
+          type="text"
+          id="size"
+          name="size"
+          value={app.size}
+          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        />
+      </div>
+
+      <!-- Rating -->
+      <div>
+        <label for="rating" class="block text-sm font-medium text-text-secondary mb-1">Rating</label>
+        <input
+          type="number"
+          id="rating"
+          name="rating"
+          value={app.rating}
+          step="0.1"
+          min="0"
+          max="5"
+          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        />
+      </div>
+
+      <!-- Developer -->
+      <div>
+        <label for="developer" class="block text-sm font-medium text-text-secondary mb-1">Developer</label>
+        <input
+          type="text"
+          id="developer"
+          name="developer"
+          value={app.developer}
+          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        />
+      </div>
+
+      <!-- Requires -->
+      <div>
+        <label for="requires" class="block text-sm font-medium text-text-secondary mb-1">Requires</label>
+        <input
+          type="text"
+          id="requires"
+          name="requires"
+          value={app.requires}
+          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        />
+      </div>
+
+      <!-- Download URL -->
+      <div>
+        <label for="downloadUrl" class="block text-sm font-medium text-text-secondary mb-1">Download URL</label>
+        <input
+          type="text"
+          id="downloadUrl"
+          name="downloadUrl"
+          value={app.downloadUrl}
+          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        />
+      </div>
+
+      <!-- Short Description -->
+      <div>
+        <label for="shortDescription" class="block text-sm font-medium text-text-secondary mb-1">Short Description</label>
+        <textarea
+          id="shortDescription"
+          name="shortDescription"
+          rows="2"
+          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        >{app.shortDescription}</textarea>
+      </div>
+
+      <!-- Full Description -->
+      <div>
+        <label for="fullDescription" class="block text-sm font-medium text-text-secondary mb-1">Full Description</label>
+        <textarea
+          id="fullDescription"
+          name="fullDescription"
+          rows="6"
+          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        >{app.fullDescription}</textarea>
+      </div>
+
+      <!-- Mod Features -->
+      <div>
+        <label for="modFeatures" class="block text-sm font-medium text-text-secondary mb-1">Mod Features <span class="text-text-muted">(one per line)</span></label>
+        <textarea
+          id="modFeatures"
+          name="modFeatures"
+          rows="4"
+          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        >{app.modFeatures.join('\n')}</textarea>
+      </div>
+
+      <!-- Screenshots -->
+      <div>
+        <label for="screenshots" class="block text-sm font-medium text-text-secondary mb-1">Screenshots <span class="text-text-muted">(one URL per line)</span></label>
+        <textarea
+          id="screenshots"
+          name="screenshots"
+          rows="4"
+          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        >{app.screenshots.join('\n')}</textarea>
+      </div>
+
+      <!-- Versions (one per line: label|version|size|downloadUrl|modType|isLatest) -->
+      <div>
+        <label for="versions" class="block text-sm font-bold text-[#343a40] mb-1">
+          Versions <span class="font-normal text-[#b2b2b2]">(one per line: label|version|size|downloadUrl|modType|isLatest)</span>
+        </label>
+        <textarea
+          id="versions"
+          name="versions"
+          rows="6"
+          class="w-full rounded-xl border border-[#e2e5e2] px-4 py-3 text-sm focus:border-[#68cb5b] focus:ring-2 focus:ring-[#68cb5b]/20 outline-none transition-all duration-200"
+          placeholder="v16.386.14 (Latest)|16.386.14|280MB|https://mega.nz/file/xxx|Full Mod|true
+v16.253.20 (Stable)|16.253.20|265MB|https://mega.nz/file/yyy|Full Mod|false"
+        >{app && app.versions ? app.versions.map(v => `${v.label}|${v.version}|${v.size}|${v.downloadUrl}|${v.modType}|${v.isLatest}`).join('\n') : ''}</textarea>
+        <p class="text-xs text-[#b2b2b2] mt-1">Format: label|version|size|downloadUrl|modType|isLatest (true/false)</p>
+      </div>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="w-full py-2.5 rounded-lg text-white font-semibold bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 transition-all cursor-pointer"
+      >
+        Save App
+      </button>
+    </form>
+  </div>
+
+  {isNew && (
+    <script>
+      const nameInput = document.getElementById('name');
+      const slugInput = document.getElementById('slug');
+      if (nameInput && slugInput) {
+        nameInput.addEventListener('input', () => {
+          slugInput.value = nameInput.value
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-|-$)/g, '')
+            + '-mod';
+        });
+      }
+    </script>
+  )}
+</BaseLayout>

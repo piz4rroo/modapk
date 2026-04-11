@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CategoryPills from '../../components/CategoryPills.astro';
+import AppCard from '../../components/AppCard.astro';
+import { getAppsByCategory } from '../../lib/apps';
+
+const { cat } = Astro.params;
+
+const validCategories = ['games', 'apps', 'tools', 'social'];
+
+if (!cat || !validCategories.includes(cat)) {
+  return Astro.redirect('/');
+}
+
+const categoryName = cat.charAt(0).toUpperCase() + cat.slice(1);
+const filteredApps = await getAppsByCategory(cat);
+---
+
+<BaseLayout title={`${categoryName} - ModVault`} description={`Download mod APK ${categoryName.toLowerCase()} terbaru untuk Android.`}>
+  <div class="max-w-[1200px] mx-auto px-8 py-8">
+
+    <!-- Page Title -->
+    <h1 class="uppercase font-bold text-xl md:text-2xl text-slate-800 mb-6">{categoryName}</h1>
+
+    <!-- Category Pills -->
+    <div class="mb-6">
+      <CategoryPills activeCategory={cat} />
+    </div>
+
+    <!-- App Grid -->
+    {filteredApps.length > 0 ? (
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+        {filteredApps.map((app) => (
+          <AppCard app={app} />
+        ))}
+      </div>
+    ) : (
+      <div class="py-20 text-center">
+        <p class="text-slate-400 text-sm">No apps found in this category.</p>
+      </div>
+    )}
+
+  </div>
+</BaseLayout>

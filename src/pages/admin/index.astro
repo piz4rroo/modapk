@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAllApps } from '../../lib/apps';
+
+// Auth check
+const token = Astro.cookies.get('admin_token')?.value;
+if (!token || token !== 'authenticated') {
+  return Astro.redirect('/admin/login');
+}
+
+// Load apps
+const apps = await getAllApps();
+---
+
+<BaseLayout title="Admin Dashboard - ModVault">
+  <div class="max-w-5xl mx-auto px-4 py-10">
+    <div class="flex items-center justify-between mb-8">
+      <h1 class="text-2xl font-bold">Admin Dashboard</h1>
+      <a
+        href="/admin/edit/new"
+        class="px-5 py-2.5 rounded-lg text-white font-semibold bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 transition-all text-sm"
+      >
+        Add New App
+      </a>
+    </div>
+
+    <div class="bg-bg-card rounded-2xl shadow-card overflow-hidden">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-border text-left text-text-secondary">
+            <th class="px-4 py-3">Icon</th>
+            <th class="px-4 py-3">Name</th>
+            <th class="px-4 py-3">Category</th>
+            <th class="px-4 py-3">Version</th>
+            <th class="px-4 py-3">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {apps.map((app, i) => (
+            <tr class={`border-b border-border ${i % 2 === 0 ? 'bg-bg-card' : 'bg-bg-primary'}`}>
+              <td class="px-4 py-3">
+                <img src={app.icon} alt={app.name} class="w-8 h-8 rounded-lg" />
+              </td>
+              <td class="px-4 py-3 font-medium">{app.name}</td>
+              <td class="px-4 py-3 capitalize">{app.category}</td>
+              <td class="px-4 py-3">{app.version}</td>
+              <td class="px-4 py-3">
+                <div class="flex items-center gap-3">
+                  <a
+                    href={`/admin/edit/${app.slug}`}
+                    class="text-indigo-500 hover:text-indigo-700 font-medium"
+                  >
+                    Edit
+                  </a>
+                  <form method="POST" action={`/api/apps/${app.slug}`} onsubmit="return confirm('Are you sure you want to delete this app?')">
+                    <input type="hidden" name="_method" value="DELETE" />
+                    <button
+                      type="submit"
+                      class="text-red-500 hover:text-red-700 font-medium cursor-pointer"
+                    >
+                      Delete
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</BaseLayout>

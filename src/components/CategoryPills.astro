@@ -1,0 +1,46 @@
+---
+interface Props {
+  activeCategory?: string;
+}
+
+const { activeCategory = "all" } = Astro.props;
+
+const categories = [
+  { label: "All", value: "all", href: "/" },
+  { label: "Games", value: "games", href: "/category/games" },
+  { label: "Apps", value: "apps", href: "/category/apps" },
+  { label: "Tools", value: "tools", href: "/category/tools" },
+  { label: "Social", value: "social", href: "/category/social" },
+];
+---
+
+<nav class="category-pills -mx-1 flex gap-2 overflow-x-auto px-1 pb-1" aria-label="Categories">
+  {categories.map((cat) => {
+    const isActive = activeCategory.toLowerCase() === cat.value;
+    return (
+      <a
+        href={cat.href}
+        class:list={[
+          "shrink-0 rounded-full px-5 py-2 text-sm font-bold transition-colors duration-150",
+          isActive
+            ? "bg-[#68cb5b] text-white shadow-[0_.25rem_1rem_0_rgba(104,203,91,0.2)]"
+            : "bg-[#edefec] text-[#343a40] hover:bg-[#e2e5e2]",
+        ]}
+        aria-current={isActive ? "page" : undefined}
+      >
+        {cat.label}
+      </a>
+    );
+  })}
+</nav>
+
+<style>
+  /* Hide scrollbar across browsers */
+  .category-pills {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .category-pills::-webkit-scrollbar {
+    display: none;
+  }
+</style>

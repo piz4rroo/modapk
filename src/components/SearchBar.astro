@@ -1,0 +1,53 @@
+---
+// SearchBar — AN1.com style pill search input
+---
+
+<div class="relative">
+  <!-- Search Icon -->
+  <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+    <svg
+      class="h-5 w-5 text-[#b2b2b2]"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+      />
+    </svg>
+  </div>
+
+  <!-- Search Input -->
+  <input
+    type="text"
+    id="search-input"
+    placeholder="Search games & apps..."
+    autocomplete="off"
+    class="w-full rounded-full border border-[#e2e5e2] bg-white py-3 pl-12 pr-5 text-sm text-[#151617] placeholder-[#b2b2b2] outline-none transition-all duration-200 focus:border-[#68cb5b] focus:ring-2 focus:ring-[#68cb5b]/20"
+  />
+</div>
+
+<script>
+  const searchInput = document.getElementById("search-input") as HTMLInputElement | null;
+
+  if (searchInput) {
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.toLowerCase().trim();
+      const cards = document.querySelectorAll<HTMLElement>("[data-name]");
+
+      cards.forEach((card) => {
+        const name = card.getAttribute("data-name") || "";
+        if (query === "" || name.includes(query)) {
+          card.style.display = "";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+  }
+</script>
