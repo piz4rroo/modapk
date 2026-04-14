@@ -1,10 +1,11 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getAppBySlug } from '../../../lib/apps';
+import { getAuthUser } from '../../../lib/auth';
 
 // Auth check
-const token = Astro.cookies.get('admin_token')?.value;
-if (!token || token !== 'authenticated') {
+const user = await getAuthUser(Astro.cookies);
+if (!user) {
   return Astro.redirect('/admin/login');
 }
 

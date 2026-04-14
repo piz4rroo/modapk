@@ -1,19 +1,26 @@
 import type { APIRoute } from 'astro';
+import { supabase } from '../../../lib/supabase';
+import { setAuthCookies } from '../../../lib/auth';
 
-export const POST: APIRoute = async ({ request, cookies, redirect }) => {
-  const formData = await request.formData();
-  const password = formData.get('password')?.toString() ?? '';
+export const POST: APIRoute = async ({ request, cookies }) => {
+  const { email, password } = await request.json();
 
-  const adminPassword = import.meta.env.ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || 'admin123';
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 
-  if (password === adminPassword) {
-    cookies.set('admin_token', 'authenticated', {
-      httpOnly: true,
-      path: '/',
-      maxAge: 86400,
-    });
-    return redirect('/admin', 302);
+  if (error || !data.session) {
+    return new Response(
+      JSON.stringify({ success: false, error: error?.message ?? 'Authentication failed' }),
+      { status: 401, headers: { 'Content-Type': 'application/json' } }
+    );
   }
 
-  return redirect('/admin/login?error=1', 302);
+  setAuthCookies(cookies, data.session);
+
+  return new Response(
+    JSON.stringify({ success: true }),
+    { status: 200, headers: { 'Content-Type': 'application/json' } }
+  );
 };

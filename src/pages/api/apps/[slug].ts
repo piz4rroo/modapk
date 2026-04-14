@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getAppBySlug, updateApp, deleteApp } from '../../../lib/apps';
+import { getAuthUser } from '../../../lib/auth';
 
 export const GET: APIRoute = async ({ params }) => {
   const app = await getAppBySlug(params.slug || '');
@@ -13,8 +14,8 @@ export const GET: APIRoute = async ({ params }) => {
 };
 
 export const POST: APIRoute = async ({ params, request, cookies, redirect }) => {
-  const token = cookies.get('admin_token')?.value;
-  if (!token || token !== 'authenticated') {
+  const user = await getAuthUser(cookies);
+  if (!user) {
     return redirect('/admin/login', 302);
   }
 

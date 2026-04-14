@@ -1,10 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getAllApps } from '../../lib/apps';
+import { getAuthUser } from '../../lib/auth';
 
 // Auth check
-const token = Astro.cookies.get('admin_token')?.value;
-if (!token || token !== 'authenticated') {
+const user = await getAuthUser(Astro.cookies);
+if (!user) {
   return Astro.redirect('/admin/login');
 }
 
@@ -16,12 +17,20 @@ const apps = await getAllApps();
   <div class="max-w-5xl mx-auto px-4 py-10">
     <div class="flex items-center justify-between mb-8">
       <h1 class="text-2xl font-bold">Admin Dashboard</h1>
-      <a
-        href="/admin/edit/new"
-        class="px-5 py-2.5 rounded-lg text-white font-semibold bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 transition-all text-sm"
-      >
-        Add New App
-      </a>
+      <div class="flex items-center gap-3">
+        <a
+          href="/admin/edit/new"
+          class="px-5 py-2.5 rounded-lg text-white font-semibold bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 transition-all text-sm"
+        >
+          Add New App
+        </a>
+        <button
+          id="logout-btn"
+          class="px-5 py-2.5 rounded-lg text-white font-semibold bg-red-500 hover:bg-red-600 transition-all text-sm cursor-pointer"
+        >
+          Logout
+        </button>
+      </div>
     </div>
 
     <div class="bg-bg-card rounded-2xl shadow-card overflow-hidden">
@@ -70,3 +79,10 @@ const apps = await getAllApps();
     </div>
   </div>
 </BaseLayout>
+
+<script>
+  document.getElementById('logout-btn')?.addEventListener('click', async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    window.location.href = '/admin/login';
+  });
+</script>

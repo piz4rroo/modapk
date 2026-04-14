@@ -1,7 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAuthUser } from '../../lib/auth';
 
-const error = Astro.url.searchParams.get('error');
+const user = await getAuthUser(Astro.cookies);
+if (user) {
+  return Astro.redirect('/admin');
+}
 ---
 
 <BaseLayout title="Admin Login - ModVault">
@@ -9,11 +13,21 @@ const error = Astro.url.searchParams.get('error');
     <div class="bg-bg-card rounded-2xl shadow-card p-8">
       <h1 class="text-2xl font-bold text-center mb-6">Admin Login</h1>
 
-      {error && (
-        <p class="text-red-500 text-sm text-center mb-4">Invalid password</p>
-      )}
+      <p id="error-msg" class="text-red-500 text-sm text-center mb-4 hidden"></p>
 
-      <form method="POST" action="/api/auth/login">
+      <form id="login-form">
+        <label for="email" class="block text-sm font-medium text-text-secondary mb-1">
+          Email
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent mb-4"
+          placeholder="Enter your email"
+        />
+
         <label for="password" class="block text-sm font-medium text-text-secondary mb-1">
           Password
         </label>
@@ -23,10 +37,12 @@ const error = Astro.url.searchParams.get('error');
           name="password"
           required
           class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent mb-6"
-          placeholder="Enter admin password"
+          placeholder="Enter your password"
         />
+
         <button
           type="submit"
+          id="submit-btn"
           class="w-full py-2.5 rounded-lg text-white font-semibold bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 transition-all cursor-pointer"
         >
           Sign In
@@ -35,3 +51,44 @@ const error = Astro.url.searchParams.get('error');
     </div>
   </div>
 </BaseLayout>
+
+<script>
+  const form = document.getElementById('login-form') as HTMLFormElement;
+  const errorMsg = document.getElementById('error-msg') as HTMLParagraphElement;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = (document.getElementById('email') as HTMLInputElement).value;
+    const password = (document.getElementById('password') as HTMLInputElement).value;
+
+    errorMsg.classList.add('hidden');
+    errorMsg.textContent = '';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Signing in...';
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        window.location.href = '/admin';
+      } else {
+        errorMsg.textContent = data.error || 'Login failed';
+        errorMsg.classList.remove('hidden');
+      }
+    } catch {
+      errorMsg.textContent = 'An unexpected error occurred';
+      errorMsg.classList.remove('hidden');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Sign In';
+    }
+  });
+</script>
