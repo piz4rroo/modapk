@@ -97,6 +97,47 @@ const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
       </a>
     </div>
 
+    <!-- Screenshots Gallery -->
+    {app.screenshots && app.screenshots.length > 0 && (
+      <div class="bg-white rounded-2xl p-6 shadow-sm transition-shadow duration-300 hover:shadow-md animate-on-scroll delay-125">
+        <h2 class="text-lg font-bold text-[#151617] mb-4">Screenshots</h2>
+        <div class="relative">
+          <div id="screenshot-gallery" class="flex gap-3 overflow-x-auto scroll-smooth pb-3 snap-x snap-mandatory" style="scrollbar-width: thin; scrollbar-color: #d5d7d3 transparent;">
+            {app.screenshots.map((src, i) => (
+              <img
+                src={src}
+                alt={`${app.name} screenshot ${i + 1}`}
+                loading="lazy"
+                class="screenshot-img h-52 sm:h-64 w-auto rounded-xl flex-shrink-0 snap-start cursor-pointer object-cover border border-[#edefec] hover:border-[#68cb5b] transition-all duration-200 hover:shadow-md"
+                data-index={i}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    )}
+
+    <!-- Screenshot Lightbox -->
+    <div id="screenshot-lightbox" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+      <button id="lightbox-close" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <button id="lightbox-prev" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <button id="lightbox-next" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+      <img id="lightbox-img" src="" alt="" class="max-h-[85vh] max-w-[90vw] rounded-xl object-contain" />
+      <div id="lightbox-counter" class="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/70 text-sm font-medium"></div>
+    </div>
+
     <!-- Version Selector Card -->
     <div class="bg-white rounded-2xl p-6 shadow-sm transition-shadow duration-300 hover:shadow-md animate-on-scroll delay-150">
       <h2 class="text-lg font-bold text-[#151617] mb-1">Choose Version</h2>
@@ -207,6 +248,54 @@ const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Screenshot Lightbox
+      const lightbox = document.getElementById('screenshot-lightbox');
+      const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+      const lightboxCounter = document.getElementById('lightbox-counter');
+      const screenshots = document.querySelectorAll('.screenshot-img');
+      let currentIndex = 0;
+
+      function openLightbox(index: number) {
+        currentIndex = index;
+        const img = screenshots[index] as HTMLImageElement;
+        if (lightboxImg) lightboxImg.src = img.src;
+        if (lightboxCounter) lightboxCounter.textContent = `${index + 1} / ${screenshots.length}`;
+        lightbox?.classList.remove('hidden');
+        lightbox?.classList.add('flex');
+      }
+
+      function closeLightbox() {
+        lightbox?.classList.add('hidden');
+        lightbox?.classList.remove('flex');
+      }
+
+      function navigate(dir: number) {
+        currentIndex = (currentIndex + dir + screenshots.length) % screenshots.length;
+        const img = screenshots[currentIndex] as HTMLImageElement;
+        if (lightboxImg) lightboxImg.src = img.src;
+        if (lightboxCounter) lightboxCounter.textContent = `${currentIndex + 1} / ${screenshots.length}`;
+      }
+
+      screenshots.forEach((img, i) => {
+        img.addEventListener('click', () => openLightbox(i));
+      });
+
+      document.getElementById('lightbox-close')?.addEventListener('click', closeLightbox);
+      document.getElementById('lightbox-prev')?.addEventListener('click', () => navigate(-1));
+      document.getElementById('lightbox-next')?.addEventListener('click', () => navigate(1));
+
+      lightbox?.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (lightbox?.classList.contains('hidden')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') navigate(-1);
+        if (e.key === 'ArrowRight') navigate(1);
+      });
+
+      // Version Selector
       const versionOptions = document.querySelectorAll('.version-option');
       const mainBtn = document.getElementById('main-download-btn');
       
