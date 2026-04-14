@@ -7,13 +7,7 @@ export default defineConfig({
   output: 'server',
   adapter: vercel(),
   security: {
-    checkOrigin: true,
-    allowedDomains: [
-      {
-        hostname: 'modapk-git-main-piz4rroos-projects.vercel.app',
-        protocol: 'https',
-      },
-    ],
+    checkOrigin: false,
   },
   vite: {
     plugins: [tailwindcss()],
