@@ -1,9 +1,8 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
+import AdminLayout from '../../../layouts/AdminLayout.astro';
 import { getAppBySlug } from '../../../lib/apps';
 import { getAuthUser } from '../../../lib/auth';
 
-// Auth check
 const user = await getAuthUser(Astro.cookies);
 if (!user) {
   return Astro.redirect('/admin/login');
@@ -28,249 +27,488 @@ let app: any = {
   fullDescription: '',
   modFeatures: [],
   screenshots: [],
+  versions: [],
 };
 
 if (!isNew) {
   const found = await getAppBySlug(slug);
   if (!found) {
-    return Astro.redirect('/admin');
+    return Astro.redirect('/admin/apps');
   }
   app = found;
 }
 
-const title = isNew ? 'Add App - ModVault' : 'Edit App - ModVault';
+const title = isNew ? 'Add New App - ModVault' : `Edit: ${app.name} - ModVault`;
 const formAction = isNew ? '/api/apps' : `/api/apps/${slug}`;
 ---
 
-<BaseLayout title={title}>
-  <div class="max-w-2xl mx-auto px-4 py-10">
-    <h1 class="text-2xl font-bold mb-8">{isNew ? 'Add New App' : `Edit: ${app.name}`}</h1>
+<AdminLayout title={title} activeNav={isNew ? 'add' : 'apps'}>
 
-    <form method="POST" action={formAction} class="space-y-5">
-      <!-- Name -->
-      <div>
-        <label for="name" class="block text-sm font-medium text-text-secondary mb-1">Name</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={app.name}
-          required
-          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-        />
+  <!-- Breadcrumb -->
+  <div class="flex items-center gap-2 text-[12px] text-[#9ca3af] mb-6">
+    <a href="/admin/apps" class="hover:text-[#68cb5b] transition-colors">Apps</a>
+    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+    <span class="text-[#1a1d21] font-medium">{isNew ? 'Add New' : app.name}</span>
+  </div>
+
+  <form method="POST" action={formAction} id="app-form" class="space-y-6" novalidate>
+
+    <!-- Basic Info Card -->
+    <div class="bg-white rounded-2xl border border-[#e5e7eb]/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] p-6">
+      <h3 class="text-[15px] font-bold text-[#1a1d21] mb-5 flex items-center gap-2">
+        <svg class="w-5 h-5 text-[#68cb5b]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Basic Information
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Name -->
+        <div>
+          <label for="name" class="block text-[12px] font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5">App Name <span class="text-red-400">*</span></label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={app.name}
+            required
+            placeholder="e.g. Clash of Clans"
+            class="w-full rounded-xl border border-[#e5e7eb] px-4 py-2.5 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all"
+          />
+          <p id="name-error" class="text-[11px] text-red-500 mt-1 hidden">App name is required</p>
+        </div>
+
+        <!-- Slug -->
+        <div>
+          <label for="slug" class="block text-[12px] font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5">Slug <span class="text-red-400">*</span></label>
+          <input
+            type="text"
+            id="slug"
+            name="slug"
+            value={app.slug}
+            required
+            placeholder="e.g. clash-of-clans-mod"
+            class="w-full rounded-xl border border-[#e5e7eb] px-4 py-2.5 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all font-mono"
+          />
+          <p id="slug-error" class="text-[11px] text-red-500 mt-1 hidden">Slug is required and must be URL-friendly</p>
+        </div>
+
+        <!-- Category -->
+        <div>
+          <label for="category" class="block text-[12px] font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5">Category</label>
+          <select
+            id="category"
+            name="category"
+            class="w-full rounded-xl border border-[#e5e7eb] px-4 py-2.5 text-[13px] text-[#1a1d21] bg-white focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all cursor-pointer"
+          >
+            <option value="games" selected={app.category === 'games'}>Games</option>
+            <option value="apps" selected={app.category === 'apps'}>Apps</option>
+            <option value="tools" selected={app.category === 'tools'}>Tools</option>
+            <option value="social" selected={app.category === 'social'}>Social</option>
+          </select>
+        </div>
+
+        <!-- Developer -->
+        <div>
+          <label for="developer" class="block text-[12px] font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5">Developer</label>
+          <input
+            type="text"
+            id="developer"
+            name="developer"
+            value={app.developer}
+            placeholder="e.g. Supercell"
+            class="w-full rounded-xl border border-[#e5e7eb] px-4 py-2.5 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all"
+          />
+        </div>
+
+        <!-- Icon URL -->
+        <div class="md:col-span-2">
+          <label for="icon" class="block text-[12px] font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5">Icon URL</label>
+          <div class="flex items-center gap-3">
+            {app.icon && <img src={app.icon} alt="" class="w-10 h-10 rounded-xl border border-[#e5e7eb]" />}
+            <input
+              type="text"
+              id="icon"
+              name="icon"
+              value={app.icon}
+              placeholder="/icons/app.webp or https://..."
+              class="flex-1 rounded-xl border border-[#e5e7eb] px-4 py-2.5 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all"
+            />
+          </div>
+        </div>
       </div>
+    </div>
 
-      <!-- Slug -->
-      <div>
-        <label for="slug" class="block text-sm font-medium text-text-secondary mb-1">Slug</label>
-        <input
-          type="text"
-          id="slug"
-          name="slug"
-          value={app.slug}
-          required
-          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-        />
-      </div>
+    <!-- Version & Technical Card -->
+    <div class="bg-white rounded-2xl border border-[#e5e7eb]/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] p-6">
+      <h3 class="text-[15px] font-bold text-[#1a1d21] mb-5 flex items-center gap-2">
+        <svg class="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        Version & Technical
+      </h3>
 
-      <!-- Category -->
-      <div>
-        <label for="category" class="block text-sm font-medium text-text-secondary mb-1">Category</label>
-        <select
-          id="category"
-          name="category"
-          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
-        >
-          <option value="games" selected={app.category === 'games'}>Games</option>
-          <option value="apps" selected={app.category === 'apps'}>Apps</option>
-          <option value="tools" selected={app.category === 'tools'}>Tools</option>
-          <option value="social" selected={app.category === 'social'}>Social</option>
-        </select>
-      </div>
-
-      <!-- Icon URL -->
-      <div>
-        <label for="icon" class="block text-sm font-medium text-text-secondary mb-1">Icon URL</label>
-        <input
-          type="text"
-          id="icon"
-          name="icon"
-          value={app.icon}
-          placeholder="/icons/app.webp"
-          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-        />
-      </div>
-
-      <!-- Version -->
-      <div>
-        <label for="version" class="block text-sm font-medium text-text-secondary mb-1">Version</label>
-        <input
-          type="text"
-          id="version"
-          name="version"
-          value={app.version}
-          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-        />
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <div>
+          <label for="version" class="block text-[12px] font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5">Version</label>
+          <input type="text" id="version" name="version" value={app.version} placeholder="1.0.0"
+            class="w-full rounded-xl border border-[#e5e7eb] px-4 py-2.5 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all" />
+        </div>
+        <div>
+          <label for="size" class="block text-[12px] font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5">Size</label>
+          <input type="text" id="size" name="size" value={app.size} placeholder="100MB"
+            class="w-full rounded-xl border border-[#e5e7eb] px-4 py-2.5 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all" />
+        </div>
+        <div>
+          <label for="rating" class="block text-[12px] font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5">Rating</label>
+          <input type="number" id="rating" name="rating" value={app.rating} step="0.1" min="0" max="5" placeholder="4.5"
+            class="w-full rounded-xl border border-[#e5e7eb] px-4 py-2.5 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all" />
+          <p id="rating-error" class="text-[11px] text-red-500 mt-1 hidden">Rating must be between 0 and 5</p>
+        </div>
+        <div>
+          <label for="requires" class="block text-[12px] font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5">Requires</label>
+          <input type="text" id="requires" name="requires" value={app.requires} placeholder="Android 5.0+"
+            class="w-full rounded-xl border border-[#e5e7eb] px-4 py-2.5 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all" />
+        </div>
       </div>
 
       <!-- Mod Info -->
-      <div>
-        <label for="modInfo" class="block text-sm font-medium text-text-secondary mb-1">Mod Info</label>
-        <input
-          type="text"
-          id="modInfo"
-          name="modInfo"
-          value={app.modInfo}
-          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-        />
-      </div>
-
-      <!-- Size -->
-      <div>
-        <label for="size" class="block text-sm font-medium text-text-secondary mb-1">Size</label>
-        <input
-          type="text"
-          id="size"
-          name="size"
-          value={app.size}
-          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-        />
-      </div>
-
-      <!-- Rating -->
-      <div>
-        <label for="rating" class="block text-sm font-medium text-text-secondary mb-1">Rating</label>
-        <input
-          type="number"
-          id="rating"
-          name="rating"
-          value={app.rating}
-          step="0.1"
-          min="0"
-          max="5"
-          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-        />
-      </div>
-
-      <!-- Developer -->
-      <div>
-        <label for="developer" class="block text-sm font-medium text-text-secondary mb-1">Developer</label>
-        <input
-          type="text"
-          id="developer"
-          name="developer"
-          value={app.developer}
-          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-        />
-      </div>
-
-      <!-- Requires -->
-      <div>
-        <label for="requires" class="block text-sm font-medium text-text-secondary mb-1">Requires</label>
-        <input
-          type="text"
-          id="requires"
-          name="requires"
-          value={app.requires}
-          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-        />
+      <div class="mt-4">
+        <label for="modInfo" class="block text-[12px] font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5">Mod Info</label>
+        <input type="text" id="modInfo" name="modInfo" value={app.modInfo} placeholder="e.g. Unlimited Gems, Gold & Elixir"
+          class="w-full rounded-xl border border-[#e5e7eb] px-4 py-2.5 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all" />
       </div>
 
       <!-- Download URL -->
-      <div>
-        <label for="downloadUrl" class="block text-sm font-medium text-text-secondary mb-1">Download URL</label>
-        <input
-          type="text"
-          id="downloadUrl"
-          name="downloadUrl"
-          value={app.downloadUrl}
-          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-        />
+      <div class="mt-4">
+        <label for="downloadUrl" class="block text-[12px] font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5">Download URL</label>
+        <input type="text" id="downloadUrl" name="downloadUrl" value={app.downloadUrl} placeholder="https://mega.nz/file/..."
+          class="w-full rounded-xl border border-[#e5e7eb] px-4 py-2.5 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all" />
+        <p id="url-error" class="text-[11px] text-red-500 mt-1 hidden">Please enter a valid URL</p>
       </div>
+    </div>
 
-      <!-- Short Description -->
-      <div>
-        <label for="shortDescription" class="block text-sm font-medium text-text-secondary mb-1">Short Description</label>
-        <textarea
-          id="shortDescription"
-          name="shortDescription"
-          rows="2"
-          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-        >{app.shortDescription}</textarea>
+    <!-- Description Card -->
+    <div class="bg-white rounded-2xl border border-[#e5e7eb]/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] p-6">
+      <h3 class="text-[15px] font-bold text-[#1a1d21] mb-5 flex items-center gap-2">
+        <svg class="w-5 h-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7" />
+        </svg>
+        Description
+      </h3>
+
+      <div class="space-y-4">
+        <div>
+          <label for="shortDescription" class="block text-[12px] font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5">Short Description</label>
+          <textarea id="shortDescription" name="shortDescription" rows="2" placeholder="Brief description for app cards..."
+            class="w-full rounded-xl border border-[#e5e7eb] px-4 py-2.5 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all resize-y">{app.shortDescription}</textarea>
+        </div>
+        <div>
+          <label for="fullDescription" class="block text-[12px] font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5">Full Description</label>
+          <textarea id="fullDescription" name="fullDescription" rows="8" placeholder="Detailed description of the app and its mod features..."
+            class="w-full rounded-xl border border-[#e5e7eb] px-4 py-2.5 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all resize-y">{app.fullDescription}</textarea>
+        </div>
       </div>
+    </div>
 
-      <!-- Full Description -->
-      <div>
-        <label for="fullDescription" class="block text-sm font-medium text-text-secondary mb-1">Full Description</label>
-        <textarea
-          id="fullDescription"
-          name="fullDescription"
-          rows="6"
-          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-        >{app.fullDescription}</textarea>
+    <!-- Mod Features Card -->
+    <div class="bg-white rounded-2xl border border-[#e5e7eb]/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] p-6">
+      <h3 class="text-[15px] font-bold text-[#1a1d21] mb-5 flex items-center gap-2">
+        <svg class="w-5 h-5 text-[#68cb5b]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+        Mod Features
+      </h3>
+
+      <div id="mod-features-list" class="space-y-2 mb-3">
+        {(app.modFeatures.length > 0 ? app.modFeatures : ['']).map((feature: string, i: number) => (
+          <div class="flex items-center gap-2 mod-feature-item" data-index={i}>
+            <svg class="w-4 h-4 text-[#9ca3af] cursor-grab drag-handle flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16" />
+            </svg>
+            <input type="text" value={feature} placeholder="e.g. Unlimited Gems"
+              class="mod-feature-input flex-1 rounded-lg border border-[#e5e7eb] px-3 py-2 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all" />
+            <button type="button" class="remove-feature w-7 h-7 rounded-lg flex items-center justify-center text-[#9ca3af] hover:text-red-500 hover:bg-red-50 transition-all cursor-pointer flex-shrink-0">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        ))}
       </div>
+      <button type="button" id="add-feature-btn" class="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#68cb5b] hover:text-[#5bb84f] transition-colors cursor-pointer">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        Add Feature
+      </button>
+      <!-- Hidden textarea for form submission -->
+      <textarea id="modFeatures" name="modFeatures" class="hidden">{app.modFeatures.join('\n')}</textarea>
+    </div>
 
-      <!-- Mod Features -->
-      <div>
-        <label for="modFeatures" class="block text-sm font-medium text-text-secondary mb-1">Mod Features <span class="text-text-muted">(one per line)</span></label>
-        <textarea
-          id="modFeatures"
-          name="modFeatures"
-          rows="4"
-          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-        >{app.modFeatures.join('\n')}</textarea>
+    <!-- Screenshots Card -->
+    <div class="bg-white rounded-2xl border border-[#e5e7eb]/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] p-6">
+      <h3 class="text-[15px] font-bold text-[#1a1d21] mb-5 flex items-center gap-2">
+        <svg class="w-5 h-5 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        Screenshots
+      </h3>
+
+      <div id="screenshots-list" class="space-y-2 mb-3">
+        {(app.screenshots.length > 0 ? app.screenshots : ['']).map((url: string, i: number) => (
+          <div class="flex items-center gap-2 screenshot-item" data-index={i}>
+            <svg class="w-4 h-4 text-[#9ca3af] cursor-grab drag-handle flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16" />
+            </svg>
+            <input type="text" value={url} placeholder="https://... or /screenshots/..."
+              class="screenshot-input flex-1 rounded-lg border border-[#e5e7eb] px-3 py-2 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all" />
+            <button type="button" class="remove-screenshot w-7 h-7 rounded-lg flex items-center justify-center text-[#9ca3af] hover:text-red-500 hover:bg-red-50 transition-all cursor-pointer flex-shrink-0">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        ))}
       </div>
+      <button type="button" id="add-screenshot-btn" class="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#68cb5b] hover:text-[#5bb84f] transition-colors cursor-pointer">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        Add Screenshot
+      </button>
+      <textarea id="screenshots" name="screenshots" class="hidden">{app.screenshots.join('\n')}</textarea>
+    </div>
 
-      <!-- Screenshots -->
-      <div>
-        <label for="screenshots" class="block text-sm font-medium text-text-secondary mb-1">Screenshots <span class="text-text-muted">(one URL per line)</span></label>
-        <textarea
-          id="screenshots"
-          name="screenshots"
-          rows="4"
-          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-        >{app.screenshots.join('\n')}</textarea>
-      </div>
+    <!-- Versions Card -->
+    <div class="bg-white rounded-2xl border border-[#e5e7eb]/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] p-6">
+      <h3 class="text-[15px] font-bold text-[#1a1d21] mb-2 flex items-center gap-2">
+        <svg class="w-5 h-5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+        </svg>
+        Versions
+      </h3>
+      <p class="text-[12px] text-[#9ca3af] mb-4">Format: label|version|size|downloadUrl|modType|isLatest (true/false)</p>
 
-      <!-- Versions (one per line: label|version|size|downloadUrl|modType|isLatest) -->
-      <div>
-        <label for="versions" class="block text-sm font-bold text-[#343a40] mb-1">
-          Versions <span class="font-normal text-[#b2b2b2]">(one per line: label|version|size|downloadUrl|modType|isLatest)</span>
-        </label>
-        <textarea
-          id="versions"
-          name="versions"
-          rows="6"
-          class="w-full rounded-xl border border-[#e2e5e2] px-4 py-3 text-sm focus:border-[#68cb5b] focus:ring-2 focus:ring-[#68cb5b]/20 outline-none transition-all duration-200"
-          placeholder="v16.386.14 (Latest)|16.386.14|280MB|https://mega.nz/file/xxx|Full Mod|true
-v16.253.20 (Stable)|16.253.20|265MB|https://mega.nz/file/yyy|Full Mod|false"
-        >{app && app.versions ? app.versions.map(v => `${v.label}|${v.version}|${v.size}|${v.downloadUrl}|${v.modType}|${v.isLatest}`).join('\n') : ''}</textarea>
-        <p class="text-xs text-[#b2b2b2] mt-1">Format: label|version|size|downloadUrl|modType|isLatest (true/false)</p>
-      </div>
+      <textarea
+        id="versions"
+        name="versions"
+        rows="5"
+        placeholder="v16.386.14 (Latest)|16.386.14|280MB|https://mega.nz/file/xxx|Full Mod|true&#10;v16.253.20 (Stable)|16.253.20|265MB|https://mega.nz/file/yyy|Full Mod|false"
+        class="w-full rounded-xl border border-[#e5e7eb] px-4 py-3 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all resize-y font-mono"
+      >{app.versions ? app.versions.map((v: any) => `${v.label}|${v.version}|${v.size}|${v.downloadUrl}|${v.modType}|${v.isLatest}`).join('\n') : ''}</textarea>
+    </div>
 
-      <!-- Submit -->
+    <!-- Submit -->
+    <div class="flex items-center gap-3">
       <button
         type="submit"
-        class="w-full py-2.5 rounded-lg text-white font-semibold bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 transition-all cursor-pointer"
+        class="px-8 py-3 rounded-xl text-[14px] font-bold text-white bg-[#68cb5b] hover:bg-[#5bb84f] shadow-[0_1px_3px_rgba(104,203,91,0.3)] hover:shadow-[0_4px_12px_rgba(104,203,91,0.3)] transition-all duration-200 cursor-pointer"
       >
-        Save App
+        {isNew ? 'Create App' : 'Save Changes'}
       </button>
-    </form>
-  </div>
+      <a href="/admin/apps" class="px-6 py-3 rounded-xl text-[14px] font-semibold text-[#6b7280] bg-[#f3f4f6] hover:bg-[#e5e7eb] transition-colors">
+        Cancel
+      </a>
+    </div>
+  </form>
 
-  {isNew && (
-    <script>
-      const nameInput = document.getElementById('name');
-      const slugInput = document.getElementById('slug');
-      if (nameInput && slugInput) {
-        nameInput.addEventListener('input', () => {
-          slugInput.value = nameInput.value
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/(^-|-$)/g, '')
-            + '-mod';
-        });
+</AdminLayout>
+
+<script>
+  // Auto-generate slug from name (only for new apps)
+  const isNew = window.location.pathname.endsWith('/new');
+  if (isNew) {
+    const nameInput = document.getElementById('name') as HTMLInputElement;
+    const slugInput = document.getElementById('slug') as HTMLInputElement;
+    if (nameInput && slugInput) {
+      nameInput.addEventListener('input', () => {
+        slugInput.value = nameInput.value
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)/g, '')
+          + '-mod';
+      });
+    }
+  }
+
+  // Mod Features - dynamic list
+  const featuresList = document.getElementById('mod-features-list')!;
+  const featuresHidden = document.getElementById('modFeatures') as HTMLTextAreaElement;
+  const addFeatureBtn = document.getElementById('add-feature-btn')!;
+
+  function createFeatureItem(value = '') {
+    const div = document.createElement('div');
+    div.className = 'flex items-center gap-2 mod-feature-item';
+    div.innerHTML = `
+      <svg class="w-4 h-4 text-[#9ca3af] cursor-grab drag-handle flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16" />
+      </svg>
+      <input type="text" value="${value.replace(/"/g, '&quot;')}" placeholder="e.g. Unlimited Gems"
+        class="mod-feature-input flex-1 rounded-lg border border-[#e5e7eb] px-3 py-2 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all" />
+      <button type="button" class="remove-feature w-7 h-7 rounded-lg flex items-center justify-center text-[#9ca3af] hover:text-red-500 hover:bg-red-50 transition-all cursor-pointer flex-shrink-0">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    `;
+    return div;
+  }
+
+  addFeatureBtn.addEventListener('click', () => {
+    featuresList.appendChild(createFeatureItem());
+  });
+
+  featuresList.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('.remove-feature');
+    if (btn) {
+      const items = featuresList.querySelectorAll('.mod-feature-item');
+      if (items.length > 1) btn.closest('.mod-feature-item')?.remove();
+    }
+  });
+
+  // Screenshots - dynamic list
+  const screenshotsList = document.getElementById('screenshots-list')!;
+  const screenshotsHidden = document.getElementById('screenshots') as HTMLTextAreaElement;
+  const addScreenshotBtn = document.getElementById('add-screenshot-btn')!;
+
+  function createScreenshotItem(value = '') {
+    const div = document.createElement('div');
+    div.className = 'flex items-center gap-2 screenshot-item';
+    div.innerHTML = `
+      <svg class="w-4 h-4 text-[#9ca3af] cursor-grab drag-handle flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16" />
+      </svg>
+      <input type="text" value="${value.replace(/"/g, '&quot;')}" placeholder="https://... or /screenshots/..."
+        class="screenshot-input flex-1 rounded-lg border border-[#e5e7eb] px-3 py-2 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all" />
+      <button type="button" class="remove-screenshot w-7 h-7 rounded-lg flex items-center justify-center text-[#9ca3af] hover:text-red-500 hover:bg-red-50 transition-all cursor-pointer flex-shrink-0">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    `;
+    return div;
+  }
+
+  addScreenshotBtn.addEventListener('click', () => {
+    screenshotsList.appendChild(createScreenshotItem());
+  });
+
+  screenshotsList.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('.remove-screenshot');
+    if (btn) {
+      const items = screenshotsList.querySelectorAll('.screenshot-item');
+      if (items.length > 1) btn.closest('.screenshot-item')?.remove();
+    }
+  });
+
+  // Drag & Drop for features and screenshots
+  function enableDragDrop(container: HTMLElement, itemSelector: string) {
+    let dragItem: HTMLElement | null = null;
+
+    container.addEventListener('dragstart', (e) => {
+      dragItem = (e.target as HTMLElement).closest(itemSelector) as HTMLElement;
+      if (dragItem) {
+        dragItem.style.opacity = '0.5';
+        e.dataTransfer?.setData('text/plain', '');
       }
-    </script>
-  )}
-</BaseLayout>
+    });
+
+    container.addEventListener('dragend', () => {
+      if (dragItem) {
+        dragItem.style.opacity = '1';
+        dragItem = null;
+      }
+    });
+
+    container.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      const target = (e.target as HTMLElement).closest(itemSelector) as HTMLElement;
+      if (target && target !== dragItem) {
+        const rect = target.getBoundingClientRect();
+        const midY = rect.top + rect.height / 2;
+        if (e.clientY < midY) {
+          container.insertBefore(dragItem!, target);
+        } else {
+          container.insertBefore(dragItem!, target.nextSibling);
+        }
+      }
+    });
+
+    // Make items draggable via handle
+    container.querySelectorAll(itemSelector).forEach((item) => {
+      (item as HTMLElement).draggable = true;
+    });
+
+    const observer = new MutationObserver(() => {
+      container.querySelectorAll(itemSelector).forEach((item) => {
+        (item as HTMLElement).draggable = true;
+      });
+    });
+    observer.observe(container, { childList: true });
+  }
+
+  enableDragDrop(featuresList, '.mod-feature-item');
+  enableDragDrop(screenshotsList, '.screenshot-item');
+
+  // Form validation & sync hidden fields before submit
+  const form = document.getElementById('app-form') as HTMLFormElement;
+  form.addEventListener('submit', (e) => {
+    // Sync mod features
+    const featureInputs = featuresList.querySelectorAll('.mod-feature-input') as NodeListOf<HTMLInputElement>;
+    const features = Array.from(featureInputs).map(i => i.value.trim()).filter(Boolean);
+    featuresHidden.value = features.join('\n');
+
+    // Sync screenshots
+    const screenshotInputs = screenshotsList.querySelectorAll('.screenshot-input') as NodeListOf<HTMLInputElement>;
+    const screenshots = Array.from(screenshotInputs).map(i => i.value.trim()).filter(Boolean);
+    screenshotsHidden.value = screenshots.join('\n');
+
+    // Validation
+    let hasError = false;
+    const nameInput = document.getElementById('name') as HTMLInputElement;
+    const slugInput = document.getElementById('slug') as HTMLInputElement;
+    const ratingInput = document.getElementById('rating') as HTMLInputElement;
+
+    // Name
+    if (!nameInput.value.trim()) {
+      document.getElementById('name-error')?.classList.remove('hidden');
+      nameInput.classList.add('border-red-400');
+      hasError = true;
+    } else {
+      document.getElementById('name-error')?.classList.add('hidden');
+      nameInput.classList.remove('border-red-400');
+    }
+
+    // Slug
+    if (!slugInput.value.trim() || !/^[a-z0-9-]+$/.test(slugInput.value.trim())) {
+      document.getElementById('slug-error')?.classList.remove('hidden');
+      slugInput.classList.add('border-red-400');
+      hasError = true;
+    } else {
+      document.getElementById('slug-error')?.classList.add('hidden');
+      slugInput.classList.remove('border-red-400');
+    }
+
+    // Rating
+    const rating = parseFloat(ratingInput.value);
+    if (isNaN(rating) || rating < 0 || rating > 5) {
+      document.getElementById('rating-error')?.classList.remove('hidden');
+      ratingInput.classList.add('border-red-400');
+      hasError = true;
+    } else {
+      document.getElementById('rating-error')?.classList.add('hidden');
+      ratingInput.classList.remove('border-red-400');
+    }
+
+    if (hasError) {
+      e.preventDefault();
+      // Scroll to first error
+      const firstError = form.querySelector('.border-red-400');
+      firstError?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  });
+</script>

@@ -25,7 +25,7 @@ export const POST: APIRoute = async ({ params, request, cookies, redirect }) => 
 
   if (method === 'DELETE') {
     await deleteApp(slug);
-    return redirect('/admin', 302);
+    return redirect('/admin/apps', 302);
   }
 
   // UPDATE
@@ -66,5 +66,5 @@ export const POST: APIRoute = async ({ params, request, cookies, redirect }) => 
   };
 
   await updateApp(slug, updatedApp);
-  return redirect('/admin', 302);
+  return redirect('/admin/apps', 302);
 };

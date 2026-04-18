@@ -1,5 +1,5 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/global.css';
 import { getAuthUser } from '../../lib/auth';
 
 const user = await getAuthUser(Astro.cookies);
@@ -8,87 +8,128 @@ if (user) {
 }
 ---
 
-<BaseLayout title="Admin Login - ModVault">
-  <div class="max-w-sm mx-auto mt-20 px-4">
-    <div class="bg-bg-card rounded-2xl shadow-card p-8">
-      <h1 class="text-2xl font-bold text-center mb-6">Admin Login</h1>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Login - ModVault</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen bg-[#111318] flex items-center justify-center p-4" style="font-family: 'DM Sans', sans-serif;">
 
-      <p id="error-msg" class="text-red-500 text-sm text-center mb-4 hidden"></p>
-
-      <form id="login-form">
-        <label for="email" class="block text-sm font-medium text-text-secondary mb-1">
-          Email
-        </label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          required
-          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent mb-4"
-          placeholder="Enter your email"
-        />
-
-        <label for="password" class="block text-sm font-medium text-text-secondary mb-1">
-          Password
-        </label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          required
-          class="w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent mb-6"
-          placeholder="Enter your password"
-        />
-
-        <button
-          type="submit"
-          id="submit-btn"
-          class="w-full py-2.5 rounded-lg text-white font-semibold bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 transition-all cursor-pointer"
-        >
-          Sign In
-        </button>
-      </form>
+    <!-- Background Effects -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+      <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-[#68cb5b]/8 blur-[150px]"></div>
+      <div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-[#68cb5b]/5 blur-[120px]"></div>
     </div>
-  </div>
-</BaseLayout>
 
-<script>
-  const form = document.getElementById('login-form') as HTMLFormElement;
-  const errorMsg = document.getElementById('error-msg') as HTMLParagraphElement;
-  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+    <div class="relative z-10 w-full max-w-[400px]">
+      
+      <!-- Logo -->
+      <div class="flex items-center justify-center gap-3 mb-8">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#68cb5b] to-[#4da343] flex items-center justify-center shadow-[0_4px_20px_rgba(104,203,91,0.3)]">
+          <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-white text-[18px] font-bold tracking-tight">ModVault</h1>
+          <p class="text-white/30 text-[11px] font-medium">Admin Panel</p>
+        </div>
+      </div>
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+      <!-- Login Card -->
+      <div class="bg-[#1a1d24] rounded-2xl border border-white/[0.06] p-8 shadow-[0_20px_60px_rgba(0,0,0,0.3)]">
+        <div class="text-center mb-6">
+          <h2 class="text-white text-[20px] font-bold">Welcome back</h2>
+          <p class="text-white/40 text-[13px] mt-1">Sign in to your admin account</p>
+        </div>
 
-    const email = (document.getElementById('email') as HTMLInputElement).value;
-    const password = (document.getElementById('password') as HTMLInputElement).value;
+        <p id="error-msg" class="text-red-400 text-[12px] text-center mb-4 hidden bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2"></p>
 
-    errorMsg.classList.add('hidden');
-    errorMsg.textContent = '';
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Signing in...';
+        <form id="login-form" class="space-y-4">
+          <div>
+            <label for="email" class="block text-[12px] font-semibold text-white/50 uppercase tracking-wide mb-1.5">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              class="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-[13px] text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/40 focus:border-[#68cb5b]/50 transition-all"
+              placeholder="admin@example.com"
+            />
+          </div>
 
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+          <div>
+            <label for="password" class="block text-[12px] font-semibold text-white/50 uppercase tracking-wide mb-1.5">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              class="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-[13px] text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/40 focus:border-[#68cb5b]/50 transition-all"
+              placeholder="Enter your password"
+            />
+          </div>
+
+          <button
+            type="submit"
+            id="submit-btn"
+            class="w-full py-3 rounded-xl text-[14px] font-bold text-white bg-[#68cb5b] hover:bg-[#5bb84f] shadow-[0_4px_20px_rgba(104,203,91,0.3)] hover:shadow-[0_4px_30px_rgba(104,203,91,0.4)] transition-all duration-200 cursor-pointer mt-2"
+          >
+            Sign In
+          </button>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <p class="text-center text-white/20 text-[11px] mt-6">
+        ModVault Admin Panel &middot; Secure Access Only
+      </p>
+    </div>
+
+    <script>
+      const form = document.getElementById('login-form') as HTMLFormElement;
+      const errorMsg = document.getElementById('error-msg') as HTMLParagraphElement;
+      const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = (document.getElementById('email') as HTMLInputElement).value;
+        const password = (document.getElementById('password') as HTMLInputElement).value;
+
+        errorMsg.classList.add('hidden');
+        errorMsg.textContent = '';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Signing in...';
+
+        try {
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+          });
+
+          const data = await res.json();
+
+          if (res.ok && data.success) {
+            window.location.href = '/admin';
+          } else {
+            errorMsg.textContent = data.error || 'Invalid email or password';
+            errorMsg.classList.remove('hidden');
+          }
+        } catch {
+          errorMsg.textContent = 'An unexpected error occurred';
+          errorMsg.classList.remove('hidden');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Sign In';
+        }
       });
-
-      const data = await res.json();
-
-      if (res.ok && data.success) {
-        window.location.href = '/admin';
-      } else {
-        errorMsg.textContent = data.error || 'Login failed';
-        errorMsg.classList.remove('hidden');
-      }
-    } catch {
-      errorMsg.textContent = 'An unexpected error occurred';
-      errorMsg.classList.remove('hidden');
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Sign In';
-    }
-  });
-</script>
+    </script>
+  </body>
+</html>

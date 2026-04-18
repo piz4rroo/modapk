@@ -129,6 +129,16 @@ const downloadUrl = selectedVersion ? selectedVersion.downloadUrl : app.download
           clearInterval(timer);
           countdownSection.classList.add('hidden');
           downloadSection.classList.remove('hidden');
+          
+          // Track download event
+          var slug = window.location.pathname.split('/download/')[1];
+          if (slug) {
+            fetch('/api/track/download', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ appSlug: slug, versionLabel: document.title }),
+            }).catch(function() {});
+          }
         }
       }, 1000);
     });

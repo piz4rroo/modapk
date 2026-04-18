@@ -56,5 +56,5 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   };
 
   await createApp(newApp);
-  return redirect('/admin', 302);
+  return redirect('/admin/apps', 302);
 };

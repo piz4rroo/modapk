@@ -244,3 +244,61 @@ INSERT INTO apps (
   '2026-01-05T12:00:00Z'::timestamptz,
   '2026-04-10T09:00:00Z'::timestamptz
 );
+
+-- ============================================================
+-- Analytics Tables
+-- ============================================================
+
+-- Page Views tracking
+CREATE TABLE IF NOT EXISTS page_views (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  page_path TEXT NOT NULL,
+  app_slug TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+ALTER TABLE page_views ENABLE ROW LEVEL SECURITY;
+
+-- Allow anyone to insert page views (for client-side tracking)
+CREATE POLICY "Allow public insert page_views"
+  ON page_views
+  FOR INSERT
+  TO anon, authenticated
+  WITH CHECK (true);
+
+-- Only authenticated users can read page views
+CREATE POLICY "Allow authenticated read page_views"
+  ON page_views
+  FOR SELECT
+  TO authenticated
+  USING (true);
+
+-- Download Events tracking
+CREATE TABLE IF NOT EXISTS download_events (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  app_slug TEXT NOT NULL,
+  version_label TEXT DEFAULT '',
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+ALTER TABLE download_events ENABLE ROW LEVEL SECURITY;
+
+-- Allow anyone to insert download events
+CREATE POLICY "Allow public insert download_events"
+  ON download_events
+  FOR INSERT
+  TO anon, authenticated
+  WITH CHECK (true);
+
+-- Only authenticated users can read download events
+CREATE POLICY "Allow authenticated read download_events"
+  ON download_events
+  FOR SELECT
+  TO authenticated
+  USING (true);
+
+-- Index for faster queries
+CREATE INDEX IF NOT EXISTS idx_page_views_created_at ON page_views(created_at);
+CREATE INDEX IF NOT EXISTS idx_page_views_app_slug ON page_views(app_slug);
+CREATE INDEX IF NOT EXISTS idx_download_events_created_at ON download_events(created_at);
+CREATE INDEX IF NOT EXISTS idx_download_events_app_slug ON download_events(app_slug);
