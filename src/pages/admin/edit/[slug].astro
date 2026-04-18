@@ -285,21 +285,98 @@ const formAction = isNew ? '/api/apps' : `/api/apps/${slug}`;
 
     <!-- Versions Card -->
     <div class="bg-white rounded-2xl border border-[#e5e7eb]/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] p-6">
-      <h3 class="text-[15px] font-bold text-[#1a1d21] mb-2 flex items-center gap-2">
-        <svg class="w-5 h-5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-        </svg>
-        Versions
-      </h3>
-      <p class="text-[12px] text-[#9ca3af] mb-4">Format: label|version|size|downloadUrl|modType|isLatest (true/false)</p>
+      <div class="flex items-center justify-between mb-5">
+        <h3 class="text-[15px] font-bold text-[#1a1d21] flex items-center gap-2">
+          <svg class="w-5 h-5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+          </svg>
+          Versions
+          <span id="version-count" class="text-[11px] font-semibold bg-indigo-50 text-indigo-500 px-2 py-0.5 rounded-full">{app.versions?.length || 0}</span>
+        </h3>
+        <button type="button" id="add-version-btn" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[12px] font-semibold text-white bg-indigo-500 hover:bg-indigo-600 shadow-sm transition-all cursor-pointer">
+          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+          Add Version
+        </button>
+      </div>
 
-      <textarea
-        id="versions"
-        name="versions"
-        rows="5"
-        placeholder="v16.386.14 (Latest)|16.386.14|280MB|https://mega.nz/file/xxx|Full Mod|true&#10;v16.253.20 (Stable)|16.253.20|265MB|https://mega.nz/file/yyy|Full Mod|false"
-        class="w-full rounded-xl border border-[#e5e7eb] px-4 py-3 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all resize-y font-mono"
-      >{app.versions ? app.versions.map((v: any) => `${v.label}|${v.version}|${v.size}|${v.downloadUrl}|${v.modType}|${v.isLatest}`).join('\n') : ''}</textarea>
+      <!-- Version List -->
+      <div id="versions-list" class="space-y-3">
+        {(app.versions && app.versions.length > 0) ? app.versions.map((v: any, i: number) => (
+          <div class="version-card border border-[#e5e7eb] rounded-xl p-4 bg-[#fafbfc] hover:border-[#c7cad0] transition-all relative group" data-index={i}>
+            {/* Header row */}
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-[#9ca3af] cursor-grab ver-drag-handle flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16" />
+                </svg>
+                <span class="text-[11px] font-bold text-[#9ca3af] uppercase tracking-wider">Version {i + 1}</span>
+                {v.isLatest && (
+                  <span class="text-[10px] font-bold bg-[#68cb5b] text-white px-2 py-0.5 rounded-full">LATEST</span>
+                )}
+              </div>
+              <div class="flex items-center gap-1">
+                <button type="button" class="ver-move-up w-7 h-7 rounded-lg flex items-center justify-center text-[#9ca3af] hover:text-indigo-500 hover:bg-indigo-50 transition-all cursor-pointer" title="Move up">
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" /></svg>
+                </button>
+                <button type="button" class="ver-move-down w-7 h-7 rounded-lg flex items-center justify-center text-[#9ca3af] hover:text-indigo-500 hover:bg-indigo-50 transition-all cursor-pointer" title="Move down">
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                </button>
+                <button type="button" class="ver-remove w-7 h-7 rounded-lg flex items-center justify-center text-[#9ca3af] hover:text-red-500 hover:bg-red-50 transition-all cursor-pointer" title="Remove">
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                </button>
+              </div>
+            </div>
+            {/* Fields */}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[10px] font-semibold text-[#9ca3af] uppercase tracking-wider mb-1">Label</label>
+                <input type="text" class="ver-label w-full rounded-lg border border-[#e5e7eb] bg-white px-3 py-2 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all" value={v.label} placeholder="e.g. v16.386.14 (Latest)" />
+              </div>
+              <div>
+                <label class="block text-[10px] font-semibold text-[#9ca3af] uppercase tracking-wider mb-1">Version Number</label>
+                <input type="text" class="ver-version w-full rounded-lg border border-[#e5e7eb] bg-white px-3 py-2 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all font-mono" value={v.version} placeholder="e.g. 16.386.14" />
+              </div>
+              <div>
+                <label class="block text-[10px] font-semibold text-[#9ca3af] uppercase tracking-wider mb-1">File Size</label>
+                <input type="text" class="ver-size w-full rounded-lg border border-[#e5e7eb] bg-white px-3 py-2 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all" value={v.size} placeholder="e.g. 280MB" />
+              </div>
+              <div>
+                <label class="block text-[10px] font-semibold text-[#9ca3af] uppercase tracking-wider mb-1">Mod Type</label>
+                <select class="ver-modtype w-full rounded-lg border border-[#e5e7eb] bg-white px-3 py-2 text-[13px] text-[#1a1d21] focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all cursor-pointer">
+                  <option value="Full Mod" selected={v.modType === 'Full Mod'}>Full Mod</option>
+                  <option value="Lite Mod" selected={v.modType === 'Lite Mod'}>Lite Mod</option>
+                  <option value="Root Mod" selected={v.modType === 'Root Mod'}>Root Mod</option>
+                  <option value="Premium Mod" selected={v.modType === 'Premium Mod'}>Premium Mod</option>
+                  <option value="Clone Mod" selected={v.modType === 'Clone Mod'}>Clone Mod</option>
+                  <option value="GB Mod" selected={v.modType === 'GB Mod'}>GB Mod</option>
+                </select>
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-[10px] font-semibold text-[#9ca3af] uppercase tracking-wider mb-1">Download URL</label>
+                <input type="text" class="ver-url w-full rounded-lg border border-[#e5e7eb] bg-white px-3 py-2 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all" value={v.downloadUrl} placeholder="https://mega.nz/file/..." />
+              </div>
+            </div>
+            {/* Latest checkbox */}
+            <div class="mt-3 flex items-center gap-2">
+              <input type="checkbox" class="ver-latest w-4 h-4 rounded border-[#d1d5db] text-[#68cb5b] focus:ring-[#68cb5b]/30 cursor-pointer accent-[#68cb5b]" checked={v.isLatest} />
+              <label class="text-[12px] font-medium text-[#6b7280] cursor-pointer select-none">Mark as latest version</label>
+            </div>
+          </div>
+        )) : (
+          <div id="versions-empty" class="border-2 border-dashed border-[#e5e7eb] rounded-xl py-10 text-center">
+            <svg class="w-10 h-10 mx-auto text-[#d1d5db] mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+            </svg>
+            <p class="text-[13px] font-medium text-[#9ca3af]">No versions added yet</p>
+            <p class="text-[11px] text-[#c4c7cc] mt-1">Click "Add Version" to create the first version</p>
+          </div>
+        )}
+      </div>
+
+      <!-- Hidden textarea for form submission (same format as before) -->
+      <textarea id="versions" name="versions" class="hidden">{app.versions ? app.versions.map((v: any) => `${v.label}|${v.version}|${v.size}|${v.downloadUrl}|${v.modType}|${v.isLatest}`).join('\n') : ''}</textarea>
     </div>
 
     <!-- Submit -->
@@ -454,7 +531,186 @@ const formAction = isNew ? '/api/apps' : `/api/apps/${slug}`;
   enableDragDrop(featuresList, '.mod-feature-item');
   enableDragDrop(screenshotsList, '.screenshot-item');
 
-  // Form validation & sync hidden fields before submit
+  // =============================================
+  // VERSION MANAGER
+  // =============================================
+  const versionsList = document.getElementById('versions-list')!;
+  const versionsHidden = document.getElementById('versions') as HTMLTextAreaElement;
+  const addVersionBtn = document.getElementById('add-version-btn')!;
+  const versionCount = document.getElementById('version-count')!;
+
+  const modTypeOptions = ['Full Mod', 'Lite Mod', 'Root Mod', 'Premium Mod', 'Clone Mod', 'GB Mod'];
+
+  function esc(str: string) {
+    return str.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function createVersionCard(data?: { label: string; version: string; size: string; downloadUrl: string; modType: string; isLatest: boolean }) {
+    const v = data || { label: '', version: '', size: '', downloadUrl: '', modType: 'Full Mod', isLatest: false };
+    const div = document.createElement('div');
+    div.className = 'version-card border border-[#e5e7eb] rounded-xl p-4 bg-[#fafbfc] hover:border-[#c7cad0] transition-all relative group';
+
+    const optionsHtml = modTypeOptions.map(opt =>
+      `<option value="${opt}" ${v.modType === opt ? 'selected' : ''}>${opt}</option>`
+    ).join('');
+
+    div.innerHTML = `
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-[#9ca3af] cursor-grab ver-drag-handle flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16" />
+          </svg>
+          <span class="ver-number text-[11px] font-bold text-[#9ca3af] uppercase tracking-wider">Version</span>
+          ${v.isLatest ? '<span class="ver-latest-badge text-[10px] font-bold bg-[#68cb5b] text-white px-2 py-0.5 rounded-full">LATEST</span>' : ''}
+        </div>
+        <div class="flex items-center gap-1">
+          <button type="button" class="ver-move-up w-7 h-7 rounded-lg flex items-center justify-center text-[#9ca3af] hover:text-indigo-500 hover:bg-indigo-50 transition-all cursor-pointer" title="Move up">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" /></svg>
+          </button>
+          <button type="button" class="ver-move-down w-7 h-7 rounded-lg flex items-center justify-center text-[#9ca3af] hover:text-indigo-500 hover:bg-indigo-50 transition-all cursor-pointer" title="Move down">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+          </button>
+          <button type="button" class="ver-remove w-7 h-7 rounded-lg flex items-center justify-center text-[#9ca3af] hover:text-red-500 hover:bg-red-50 transition-all cursor-pointer" title="Remove">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+          </button>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-[10px] font-semibold text-[#9ca3af] uppercase tracking-wider mb-1">Label</label>
+          <input type="text" class="ver-label w-full rounded-lg border border-[#e5e7eb] bg-white px-3 py-2 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all" value="${esc(v.label)}" placeholder="e.g. v16.386.14 (Latest)" />
+        </div>
+        <div>
+          <label class="block text-[10px] font-semibold text-[#9ca3af] uppercase tracking-wider mb-1">Version Number</label>
+          <input type="text" class="ver-version w-full rounded-lg border border-[#e5e7eb] bg-white px-3 py-2 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all font-mono" value="${esc(v.version)}" placeholder="e.g. 16.386.14" />
+        </div>
+        <div>
+          <label class="block text-[10px] font-semibold text-[#9ca3af] uppercase tracking-wider mb-1">File Size</label>
+          <input type="text" class="ver-size w-full rounded-lg border border-[#e5e7eb] bg-white px-3 py-2 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all" value="${esc(v.size)}" placeholder="e.g. 280MB" />
+        </div>
+        <div>
+          <label class="block text-[10px] font-semibold text-[#9ca3af] uppercase tracking-wider mb-1">Mod Type</label>
+          <select class="ver-modtype w-full rounded-lg border border-[#e5e7eb] bg-white px-3 py-2 text-[13px] text-[#1a1d21] focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all cursor-pointer">
+            ${optionsHtml}
+          </select>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="block text-[10px] font-semibold text-[#9ca3af] uppercase tracking-wider mb-1">Download URL</label>
+          <input type="text" class="ver-url w-full rounded-lg border border-[#e5e7eb] bg-white px-3 py-2 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all" value="${esc(v.downloadUrl)}" placeholder="https://mega.nz/file/..." />
+        </div>
+      </div>
+      <div class="mt-3 flex items-center gap-2">
+        <input type="checkbox" class="ver-latest w-4 h-4 rounded border-[#d1d5db] text-[#68cb5b] focus:ring-[#68cb5b]/30 cursor-pointer accent-[#68cb5b]" ${v.isLatest ? 'checked' : ''} />
+        <label class="text-[12px] font-medium text-[#6b7280] cursor-pointer select-none">Mark as latest version</label>
+      </div>
+    `;
+    return div;
+  }
+
+  function updateVersionNumbers() {
+    const cards = versionsList.querySelectorAll('.version-card');
+    cards.forEach((card, i) => {
+      const numEl = card.querySelector('.ver-number');
+      if (numEl) numEl.textContent = `Version ${i + 1}`;
+    });
+    versionCount.textContent = String(cards.length);
+    // Remove empty state if versions exist
+    const empty = document.getElementById('versions-empty');
+    if (empty && cards.length > 0) empty.remove();
+  }
+
+  // Add version
+  addVersionBtn.addEventListener('click', () => {
+    const empty = document.getElementById('versions-empty');
+    if (empty) empty.remove();
+    const card = createVersionCard();
+    versionsList.appendChild(card);
+    updateVersionNumbers();
+    card.querySelector('.ver-label')?.focus();
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  // Delegated events for version cards
+  versionsList.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const card = target.closest('.version-card') as HTMLElement;
+    if (!card) return;
+
+    // Remove
+    if (target.closest('.ver-remove')) {
+      card.style.opacity = '0';
+      card.style.transform = 'translateX(20px)';
+      card.style.transition = 'all 0.2s ease';
+      setTimeout(() => {
+        card.remove();
+        updateVersionNumbers();
+        // Show empty state if no versions left
+        if (versionsList.querySelectorAll('.version-card').length === 0) {
+          versionsList.innerHTML = `
+            <div id="versions-empty" class="border-2 border-dashed border-[#e5e7eb] rounded-xl py-10 text-center">
+              <svg class="w-10 h-10 mx-auto text-[#d1d5db] mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+              </svg>
+              <p class="text-[13px] font-medium text-[#9ca3af]">No versions added yet</p>
+              <p class="text-[11px] text-[#c4c7cc] mt-1">Click "Add Version" to create the first version</p>
+            </div>`;
+          versionCount.textContent = '0';
+        }
+      }, 200);
+      return;
+    }
+
+    // Move up
+    if (target.closest('.ver-move-up')) {
+      const prev = card.previousElementSibling;
+      if (prev && prev.classList.contains('version-card')) {
+        versionsList.insertBefore(card, prev);
+        updateVersionNumbers();
+      }
+      return;
+    }
+
+    // Move down
+    if (target.closest('.ver-move-down')) {
+      const next = card.nextElementSibling;
+      if (next && next.classList.contains('version-card')) {
+        versionsList.insertBefore(next, card);
+        updateVersionNumbers();
+      }
+      return;
+    }
+  });
+
+  // Latest checkbox: only one can be checked at a time
+  versionsList.addEventListener('change', (e) => {
+    const target = e.target as HTMLInputElement;
+    if (target.classList.contains('ver-latest') && target.checked) {
+      // Uncheck all others
+      versionsList.querySelectorAll('.ver-latest').forEach((cb) => {
+        if (cb !== target) (cb as HTMLInputElement).checked = false;
+      });
+      // Update badges
+      versionsList.querySelectorAll('.version-card').forEach((card) => {
+        const cb = card.querySelector('.ver-latest') as HTMLInputElement;
+        const existingBadge = card.querySelector('.ver-latest-badge');
+        if (cb.checked && !existingBadge) {
+          const badgeSpan = document.createElement('span');
+          badgeSpan.className = 'ver-latest-badge text-[10px] font-bold bg-[#68cb5b] text-white px-2 py-0.5 rounded-full';
+          badgeSpan.textContent = 'LATEST';
+          card.querySelector('.ver-number')?.after(badgeSpan);
+        } else if (!cb.checked && existingBadge) {
+          existingBadge.remove();
+        }
+      });
+    }
+  });
+
+  // Drag & drop for version cards
+  enableDragDrop(versionsList, '.version-card');
+
+  // =============================================
+  // FORM SUBMISSION
+  // =============================================
   const form = document.getElementById('app-form') as HTMLFormElement;
   form.addEventListener('submit', (e) => {
     // Sync mod features
@@ -466,6 +722,22 @@ const formAction = isNew ? '/api/apps' : `/api/apps/${slug}`;
     const screenshotInputs = screenshotsList.querySelectorAll('.screenshot-input') as NodeListOf<HTMLInputElement>;
     const screenshots = Array.from(screenshotInputs).map(i => i.value.trim()).filter(Boolean);
     screenshotsHidden.value = screenshots.join('\n');
+
+    // Sync versions: read from visual cards -> pipe-delimited format
+    const versionCards = versionsList.querySelectorAll('.version-card');
+    const versionLines: string[] = [];
+    versionCards.forEach((card) => {
+      const label = (card.querySelector('.ver-label') as HTMLInputElement)?.value.trim() || '';
+      const version = (card.querySelector('.ver-version') as HTMLInputElement)?.value.trim() || '';
+      const size = (card.querySelector('.ver-size') as HTMLInputElement)?.value.trim() || '';
+      const url = (card.querySelector('.ver-url') as HTMLInputElement)?.value.trim() || '';
+      const modType = (card.querySelector('.ver-modtype') as HTMLSelectElement)?.value || 'Full Mod';
+      const isLatest = (card.querySelector('.ver-latest') as HTMLInputElement)?.checked ? 'true' : 'false';
+      if (label || version) {
+        versionLines.push(`${label}|${version}|${size}|${url}|${modType}|${isLatest}`);
+      }
+    });
+    versionsHidden.value = versionLines.join('\n');
 
     // Validation
     let hasError = false;
@@ -506,7 +778,6 @@ const formAction = isNew ? '/api/apps' : `/api/apps/${slug}`;
 
     if (hasError) {
       e.preventDefault();
-      // Scroll to first error
       const firstError = form.querySelector('.border-red-400');
       firstError?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
