@@ -1,294 +1,536 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import AppCard from '../components/AppCard.astro';
-import SearchBar from '../components/SearchBar.astro';
-import CategoryPills from '../components/CategoryPills.astro';
-import { getAllApps } from '../lib/apps';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import AppCard from "../components/AppCard.astro";
+import SearchBar from "../components/SearchBar.astro";
+import CategoryPills from "../components/CategoryPills.astro";
+import { getAllApps } from "../lib/apps";
 
 const allApps = await getAllApps();
-const gameApps = allApps.filter((app) => app.category === 'games');
-const nonGameApps = allApps.filter((app) => app.category !== 'games');
+const gameApps = allApps.filter((app) => app.category === "games");
+const nonGameApps = allApps.filter((app) => app.category !== "games");
 ---
 
-<BaseLayout title="Rrmod - Download Mod APK Games & Apps" description="Download game & aplikasi Android mod terpercaya. Koleksi mod APK terbaru dan terupdate.">
-
-  <!-- ============================================ -->
-  <!-- 1. HERO SECTION                              -->
-  <!-- ============================================ -->
-  <section class="relative isolate overflow-hidden bg-[#0a0a0a] pb-8 pt-20 md:pt-28 md:pb-16">
-
-    <!-- BG Layer 1: dark green gradient -->
-    <div class="absolute inset-0 bg-gradient-to-b from-[#0f1a0f] to-[#0a0a0a]" aria-hidden="true"></div>
-
-    <!-- BG Layer 2: glow orb top-center -->
-    <div class="absolute -top-28 left-1/2 h-[36rem] w-[36rem] -translate-x-1/2 rounded-full bg-[#68cb5b]/15 blur-[128px]" aria-hidden="true"></div>
-
-    <!-- BG Layer 3: SVG grid pattern -->
-    <svg class="absolute inset-0 h-full w-full opacity-[0.07]" aria-hidden="true">
-      <defs>
-        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="0.5"/>
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#grid)"/>
-    </svg>
-
-    <!-- BG Layer 4: glow orb right -->
-    <div class="absolute top-1/2 right-0 h-72 w-72 -translate-y-1/2 rounded-full bg-[#f77a4c]/10 blur-[100px]" aria-hidden="true"></div>
-
-    <!-- Content -->
-    <div class="relative z-10 max-w-[1200px] mx-auto px-6 md:px-8">
-      <div class="md:grid md:grid-cols-2 md:gap-12 lg:gap-16 items-center">
-
-        <!-- Left Column -->
-        <div>
-          <!-- Badge -->
-          <span class="inline-flex items-center bg-[#68cb5b]/20 border border-[#68cb5b]/40 text-[#68cb5b] rounded-full px-3 py-1 text-xs font-bold mb-4 animate-on-scroll">
-            Terbaru 2026
-          </span>
-
-          <!-- Heading -->
-          <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white animate-on-scroll delay-100">
-            Download <span class="text-gradient">Mod APK</span><br/>
-            Games &amp; Apps
-          </h1>
-
-          <!-- Description -->
-          <p class="text-base text-neutral-400 mt-4 max-w-lg animate-on-scroll delay-200">
-            Koleksi mod APK terbaru dan terpercaya untuk Android. Unlimited resources, premium unlocked, dan banyak lagi.
-          </p>
-
-          <!-- CTA Buttons -->
-          <div class="flex flex-wrap gap-3 mt-6 animate-on-scroll delay-300">
-            <a
-              href="/category/games"
-              class="bg-[#68cb5b] hover:bg-[#5bb84f] text-white font-bold rounded-full px-6 py-3 shadow-[0_.5rem_1.5rem_0_rgba(104,203,91,0.3)] transition-all duration-200 hover:shadow-[0_.5rem_2rem_0_rgba(104,203,91,0.4)] hover:-translate-y-0.5"
-            >
-              Browse Games
-            </a>
-            <a
-              href="/category/apps"
-              class="border border-white/20 text-white hover:border-white/40 hover:bg-white/5 font-bold rounded-full px-6 py-3 transition-all duration-200"
-            >
-              Browse Apps
-            </a>
-          </div>
-
-          <!-- Feature Pills -->
-          <div class="flex flex-wrap gap-2 mt-6 animate-on-scroll delay-400">
-            <span class="rounded-xl border border-neutral-800/60 bg-neutral-900/40 px-3 py-1.5 text-xs text-neutral-400">Unlimited Coins</span>
-            <span class="rounded-xl border border-neutral-800/60 bg-neutral-900/40 px-3 py-1.5 text-xs text-neutral-400">Premium Unlocked</span>
-            <span class="rounded-xl border border-neutral-800/60 bg-neutral-900/40 px-3 py-1.5 text-xs text-neutral-400">Ad-Free</span>
-          </div>
+<BaseLayout
+    title="Rrmod - Download Mod APK Games & Apps"
+    description="Download trusted Android mod games & applications. The latest and most updated mod APK collection."
+>
+    <!-- ============================================ -->
+    <!-- 1. HERO SECTION                              -->
+    <!-- ============================================ -->
+    <section
+        class="relative isolate overflow-hidden bg-[#0a0a0a] pb-8 pt-20 md:pt-28 md:pb-16"
+    >
+        <!-- BG Layer 1: dark green gradient -->
+        <div
+            class="absolute inset-0 bg-gradient-to-b from-[#0f1a0f] to-[#0a0a0a]"
+            aria-hidden="true"
+        >
         </div>
 
-        <!-- Right Column (floating cards) -->
-        <div class="hidden md:block relative h-[380px]">
-
-          <!-- Card 1: Top Game -->
-          <div
-            class="absolute top-8 right-4 z-20 w-48 md:w-56 rounded-2xl glass p-4 shadow-2xl animate-on-scroll delay-200"
-            style="--float-rotate: -3deg; animation: float 6s ease-in-out infinite;"
-          >
-            <div class="flex items-center gap-3 mb-3">
-              <div class="h-10 w-10 rounded-xl bg-[#68cb5b]/20 flex items-center justify-center shrink-0">
-                <svg class="h-5 w-5 text-[#68cb5b]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-              </div>
-              <div>
-                <p class="text-white text-sm font-bold leading-tight">Clash of Clans</p>
-                <p class="text-[#68cb5b] text-[10px] font-bold mt-0.5">TOP GAME</p>
-              </div>
-            </div>
-            <p class="text-neutral-400 text-xs">MOD: Unlimited Gems</p>
-            <div class="flex items-center gap-1 mt-2">
-              <svg class="h-3.5 w-3.5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-              <svg class="h-3.5 w-3.5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-              <svg class="h-3.5 w-3.5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-              <svg class="h-3.5 w-3.5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-              <svg class="h-3.5 w-3.5 text-yellow-400/40" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-              <span class="text-neutral-500 text-[10px] ml-1">4.7</span>
-            </div>
-          </div>
-
-          <!-- Card 2: Category Grid -->
-          <div
-            class="absolute top-4 left-0 z-10 w-40 md:w-44 rounded-xl glass p-3 shadow-xl animate-on-scroll delay-400"
-            style="--float-rotate: 5deg; animation: float 7s ease-in-out 1s infinite;"
-          >
-            <p class="text-white text-xs font-bold mb-2">Categories</p>
-            <div class="grid grid-cols-2 gap-2">
-              <div class="rounded-lg bg-[#68cb5b]/20 p-2 text-center">
-                <div class="h-5 w-5 mx-auto rounded bg-[#68cb5b]/40 mb-1"></div>
-                <span class="text-[9px] text-neutral-300">Games</span>
-              </div>
-              <div class="rounded-lg bg-blue-500/20 p-2 text-center">
-                <div class="h-5 w-5 mx-auto rounded bg-blue-500/40 mb-1"></div>
-                <span class="text-[9px] text-neutral-300">Apps</span>
-              </div>
-              <div class="rounded-lg bg-[#f77a4c]/20 p-2 text-center">
-                <div class="h-5 w-5 mx-auto rounded bg-[#f77a4c]/40 mb-1"></div>
-                <span class="text-[9px] text-neutral-300">Tools</span>
-              </div>
-              <div class="rounded-lg bg-purple-500/20 p-2 text-center">
-                <div class="h-5 w-5 mx-auto rounded bg-purple-500/40 mb-1"></div>
-                <span class="text-[9px] text-neutral-300">Social</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 3: Stats -->
-          <div
-            class="absolute bottom-4 left-6 z-[15] w-36 md:w-40 rounded-xl glass p-3 animate-on-scroll delay-500"
-            style="--float-rotate: -5deg; animation: float 8s ease-in-out 2s infinite;"
-          >
-            <p class="text-white text-xs font-bold">8+ Apps</p>
-            <p class="text-neutral-500 text-[10px] mt-1">Available now</p>
-            <div class="mt-2 h-1.5 w-full rounded-full bg-neutral-800 overflow-hidden">
-              <div class="h-full w-3/4 rounded-full bg-gradient-to-r from-[#68cb5b] to-[#68cb5b]/60"></div>
-            </div>
-          </div>
-
-          <!-- Decorative dots -->
-          <div class="absolute top-1/3 left-8 h-4 w-4 rounded-full bg-[#68cb5b]/40 blur-sm" aria-hidden="true"></div>
-          <div class="absolute right-12 bottom-1/3 h-3 w-3 rounded-full bg-[#f77a4c]/30 blur-sm" aria-hidden="true"></div>
+        <!-- BG Layer 2: glow orb top-center -->
+        <div
+            class="absolute -top-28 left-1/2 h-[36rem] w-[36rem] -translate-x-1/2 rounded-full bg-[#68cb5b]/15 blur-[128px]"
+            aria-hidden="true"
+        >
         </div>
 
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================ -->
-  <!-- 2. SEARCH + FILTER SECTION                   -->
-  <!-- ============================================ -->
-  <div class="max-w-[1200px] mx-auto px-6 md:px-8 mt-8 md:mt-12">
-    <div class="animate-on-scroll">
-      <SearchBar />
-    </div>
-    <div class="mt-4 animate-on-scroll delay-100">
-      <CategoryPills activeCategory="all" />
-    </div>
-  </div>
-
-  <!-- ============================================ -->
-  <!-- 3. LATEST GAMES SECTION                      -->
-  <!-- ============================================ -->
-  <section class="max-w-[1200px] mx-auto px-6 md:px-8 mt-10 md:mt-14">
-    <h2 class="text-lg md:text-xl font-bold uppercase tracking-wide text-slate-800 animate-on-scroll">
-      Latest Games
-    </h2>
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5 mt-5">
-      {gameApps.map((app) => (
-        <AppCard app={app} />
-      ))}
-    </div>
-    <div class="mt-6 text-center">
-      <a
-        href="/category/games"
-        class="inline-flex items-center gap-2 border border-[#68cb5b] text-[#68cb5b] hover:bg-[#68cb5b] hover:text-white font-bold rounded-full px-6 py-2.5 transition-all duration-200 mt-6"
-      >
-        All Games
-        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+        <!-- BG Layer 3: SVG grid pattern -->
+        <svg
+            class="absolute inset-0 h-full w-full opacity-[0.07]"
+            aria-hidden="true"
+        >
+            <defs>
+                <pattern
+                    id="grid"
+                    width="40"
+                    height="40"
+                    patternUnits="userSpaceOnUse"
+                >
+                    <path
+                        d="M 40 0 L 0 0 0 40"
+                        fill="none"
+                        stroke="white"
+                        stroke-width="0.5"></path>
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)"></rect>
         </svg>
-      </a>
+
+        <!-- BG Layer 4: glow orb right -->
+        <div
+            class="absolute top-1/2 right-0 h-72 w-72 -translate-y-1/2 rounded-full bg-[#f77a4c]/10 blur-[100px]"
+            aria-hidden="true"
+        >
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 max-w-[1200px] mx-auto px-6 md:px-8">
+            <div
+                class="md:grid md:grid-cols-2 md:gap-12 lg:gap-16 items-center"
+            >
+                <!-- Left Column -->
+                <div>
+                    <!-- Badge -->
+                    <span
+                        class="inline-flex items-center bg-[#68cb5b]/20 border border-[#68cb5b]/40 text-[#68cb5b] rounded-full px-3 py-1 text-xs font-bold mb-4 animate-on-scroll"
+                    >
+                        Trusted
+                    </span>
+
+                    <!-- Heading -->
+                    <h1
+                        class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white animate-on-scroll delay-100"
+                    >
+                        Download <span class="text-gradient">Mod APK</span><br
+                        />
+                        Games &amp; Apps
+                    </h1>
+
+                    <!-- Description -->
+                    <p
+                        class="text-base text-neutral-400 mt-4 max-w-lg animate-on-scroll delay-200"
+                    >
+                        Koleksi mod APK terbaru dan terpercaya untuk Android.
+                        Unlimited resources, premium unlocked, dan banyak lagi.
+                    </p>
+
+                    <!-- CTA Buttons -->
+                    <div
+                        class="flex flex-wrap gap-3 mt-6 animate-on-scroll delay-300"
+                    >
+                        <a
+                            href="/category/games"
+                            class="bg-[#68cb5b] hover:bg-[#5bb84f] text-white font-bold rounded-full px-6 py-3 shadow-[0_.5rem_1.5rem_0_rgba(104,203,91,0.3)] transition-all duration-200 hover:shadow-[0_.5rem_2rem_0_rgba(104,203,91,0.4)] hover:-translate-y-0.5"
+                        >
+                            Browse Games
+                        </a>
+                        <a
+                            href="/category/apps"
+                            class="border border-white/20 text-white hover:border-white/40 hover:bg-white/5 font-bold rounded-full px-6 py-3 transition-all duration-200"
+                        >
+                            Browse Apps
+                        </a>
+                    </div>
+
+                    <!-- Feature Pills -->
+                    <div
+                        class="flex flex-wrap gap-2 mt-6 animate-on-scroll delay-400"
+                    >
+                        <span
+                            class="rounded-xl border border-neutral-800/60 bg-neutral-900/40 px-3 py-1.5 text-xs text-neutral-400"
+                            >Unlimited Coins</span
+                        >
+                        <span
+                            class="rounded-xl border border-neutral-800/60 bg-neutral-900/40 px-3 py-1.5 text-xs text-neutral-400"
+                            >Premium Unlocked</span
+                        >
+                        <span
+                            class="rounded-xl border border-neutral-800/60 bg-neutral-900/40 px-3 py-1.5 text-xs text-neutral-400"
+                            >Ad-Free</span
+                        >
+                    </div>
+                </div>
+
+                <!-- Right Column (floating cards) -->
+                <div class="hidden md:block relative h-[380px]">
+                    <!-- Card 1: Top Game -->
+                    <div
+                        class="absolute top-8 right-4 z-20 w-48 md:w-56 rounded-2xl glass p-4 shadow-2xl animate-on-scroll delay-200"
+                        style="--float-rotate: -3deg; animation: float 6s ease-in-out infinite;"
+                    >
+                        <div class="flex items-center gap-3 mb-3">
+                            <div
+                                class="h-10 w-10 rounded-xl bg-[#68cb5b]/20 flex items-center justify-center shrink-0"
+                            >
+                                <svg
+                                    class="h-5 w-5 text-[#68cb5b]"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                                    ></path>
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    ></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p
+                                    class="text-white text-sm font-bold leading-tight"
+                                >
+                                    Clash of Clans
+                                </p>
+                                <p
+                                    class="text-[#68cb5b] text-[10px] font-bold mt-0.5"
+                                >
+                                    TOP GAME
+                                </p>
+                            </div>
+                        </div>
+                        <p class="text-neutral-400 text-xs">
+                            MOD: Unlimited Gems
+                        </p>
+                        <div class="flex items-center gap-1 mt-2">
+                            <svg
+                                class="h-3.5 w-3.5 text-yellow-400"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                                ><path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                                ></path></svg
+                            >
+                            <svg
+                                class="h-3.5 w-3.5 text-yellow-400"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                                ><path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                                ></path></svg
+                            >
+                            <svg
+                                class="h-3.5 w-3.5 text-yellow-400"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                                ><path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                                ></path></svg
+                            >
+                            <svg
+                                class="h-3.5 w-3.5 text-yellow-400"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                                ><path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                                ></path></svg
+                            >
+                            <svg
+                                class="h-3.5 w-3.5 text-yellow-400/40"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                                ><path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                                ></path></svg
+                            >
+                            <span class="text-neutral-500 text-[10px] ml-1"
+                                >4.7</span
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Category Grid -->
+                    <div
+                        class="absolute top-4 left-0 z-10 w-40 md:w-44 rounded-xl glass p-3 shadow-xl animate-on-scroll delay-400"
+                        style="--float-rotate: 5deg; animation: float 7s ease-in-out 1s infinite;"
+                    >
+                        <p class="text-white text-xs font-bold mb-2">
+                            Categories
+                        </p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div
+                                class="rounded-lg bg-[#68cb5b]/20 p-2 text-center"
+                            >
+                                <div
+                                    class="h-5 w-5 mx-auto rounded bg-[#68cb5b]/40 mb-1"
+                                >
+                                </div>
+                                <span class="text-[9px] text-neutral-300"
+                                    >Games</span
+                                >
+                            </div>
+                            <div
+                                class="rounded-lg bg-blue-500/20 p-2 text-center"
+                            >
+                                <div
+                                    class="h-5 w-5 mx-auto rounded bg-blue-500/40 mb-1"
+                                >
+                                </div>
+                                <span class="text-[9px] text-neutral-300"
+                                    >Apps</span
+                                >
+                            </div>
+                            <div
+                                class="rounded-lg bg-[#f77a4c]/20 p-2 text-center"
+                            >
+                                <div
+                                    class="h-5 w-5 mx-auto rounded bg-[#f77a4c]/40 mb-1"
+                                >
+                                </div>
+                                <span class="text-[9px] text-neutral-300"
+                                    >Tools</span
+                                >
+                            </div>
+                            <div
+                                class="rounded-lg bg-purple-500/20 p-2 text-center"
+                            >
+                                <div
+                                    class="h-5 w-5 mx-auto rounded bg-purple-500/40 mb-1"
+                                >
+                                </div>
+                                <span class="text-[9px] text-neutral-300"
+                                    >Social</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Stats -->
+                    <div
+                        class="absolute bottom-4 left-6 z-[15] w-36 md:w-40 rounded-xl glass p-3 animate-on-scroll delay-500"
+                        style="--float-rotate: -5deg; animation: float 8s ease-in-out 2s infinite;"
+                    >
+                        <p class="text-white text-xs font-bold">8+ Apps</p>
+                        <p class="text-neutral-500 text-[10px] mt-1">
+                            Available now
+                        </p>
+                        <div
+                            class="mt-2 h-1.5 w-full rounded-full bg-neutral-800 overflow-hidden"
+                        >
+                            <div
+                                class="h-full w-3/4 rounded-full bg-gradient-to-r from-[#68cb5b] to-[#68cb5b]/60"
+                            >
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Decorative dots -->
+                    <div
+                        class="absolute top-1/3 left-8 h-4 w-4 rounded-full bg-[#68cb5b]/40 blur-sm"
+                        aria-hidden="true"
+                    >
+                    </div>
+                    <div
+                        class="absolute right-12 bottom-1/3 h-3 w-3 rounded-full bg-[#f77a4c]/30 blur-sm"
+                        aria-hidden="true"
+                    >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 2. SEARCH + FILTER SECTION                   -->
+    <!-- ============================================ -->
+    <div class="max-w-[1200px] mx-auto px-6 md:px-8 mt-8 md:mt-12">
+        <div class="animate-on-scroll">
+            <SearchBar />
+        </div>
+        <div class="mt-4 animate-on-scroll delay-100">
+            <CategoryPills activeCategory="all" />
+        </div>
     </div>
-  </section>
 
-  <!-- ============================================ -->
-  <!-- 4. AD PLACEHOLDER                            -->
-  <!-- ============================================ -->
-  <div class="max-w-[1200px] mx-auto px-6 md:px-8 mt-10">
-    <div class="flex items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 py-6 text-xs text-slate-400">
-      Advertisement
-    </div>
-  </div>
-
-  <!-- ============================================ -->
-  <!-- 5. LATEST APPS SECTION                       -->
-  <!-- ============================================ -->
-  <section class="max-w-[1200px] mx-auto px-6 md:px-8 mt-10">
-    <h2 class="text-lg md:text-xl font-bold uppercase tracking-wide text-slate-800 animate-on-scroll">
-      Latest Apps
-    </h2>
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5 mt-5">
-      {nonGameApps.map((app) => (
-        <AppCard app={app} />
-      ))}
-    </div>
-    <div class="mt-6 text-center">
-      <a
-        href="/category/apps"
-        class="inline-flex items-center gap-2 border border-[#f77a4c] text-[#f77a4c] hover:bg-[#f77a4c] hover:text-white font-bold rounded-full px-6 py-2.5 transition-all duration-200 mt-6"
-      >
-        All Apps
-        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-        </svg>
-      </a>
-    </div>
-  </section>
-
-  <!-- ============================================ -->
-  <!-- 6. ABOUT / FEATURES SECTION                  -->
-  <!-- ============================================ -->
-  <section class="relative overflow-hidden bg-gradient-to-b from-[#0a0a0a] to-[#111] py-16 md:py-20 mt-12">
-
-    <!-- Background glow -->
-    <div class="absolute left-1/2 top-0 h-96 w-96 -translate-x-1/2 rounded-full bg-[#68cb5b]/10 blur-[120px]" aria-hidden="true"></div>
-
-    <div class="relative z-10 max-w-[1200px] mx-auto px-6 md:px-8">
-
-      <!-- Title -->
-      <div class="text-center mb-10 md:mb-14">
-        <h2 class="text-2xl md:text-3xl font-bold text-white animate-on-scroll">
-          Why Rrmod?
+    <!-- ============================================ -->
+    <!-- 3. LATEST GAMES SECTION                      -->
+    <!-- ============================================ -->
+    <section class="max-w-[1200px] mx-auto px-6 md:px-8 mt-10 md:mt-14">
+        <h2
+            class="text-lg md:text-xl font-bold uppercase tracking-wide text-slate-800 animate-on-scroll"
+        >
+            Latest Games
         </h2>
-        <p class="text-neutral-400 mt-3 max-w-md mx-auto text-sm animate-on-scroll delay-100">
-          Platform download mod APK terpercaya dengan koleksi terlengkap dan terupdate.
-        </p>
-      </div>
-
-      <!-- Feature Cards -->
-      <div class="grid gap-5 md:grid-cols-3">
-
-        <!-- Card 1: Verified Mods -->
-        <div class="glass glass-hover rounded-2xl p-6 text-neutral-200 transition-all duration-300 animate-on-scroll delay-200">
-          <div class="h-12 w-12 rounded-xl bg-[#68cb5b]/20 flex items-center justify-center mb-4">
-            <svg class="h-6 w-6 text-[#68cb5b]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-            </svg>
-          </div>
-          <h3 class="text-white font-bold text-base mb-2">Verified Mods</h3>
-          <p class="text-neutral-400 text-sm leading-relaxed">Semua mod diverifikasi dan bebas virus. Keamanan perangkat kamu adalah prioritas utama kami.</p>
+        <div
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5 mt-5"
+        >
+            {gameApps.map((app) => <AppCard app={app} />)}
         </div>
-
-        <!-- Card 2: Fast Downloads -->
-        <div class="glass glass-hover rounded-2xl p-6 text-neutral-200 transition-all duration-300 animate-on-scroll delay-300">
-          <div class="h-12 w-12 rounded-xl bg-[#68cb5b]/20 flex items-center justify-center mb-4">
-            <svg class="h-6 w-6 text-[#68cb5b]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-            </svg>
-          </div>
-          <h3 class="text-white font-bold text-base mb-2">Fast Downloads</h3>
-          <p class="text-neutral-400 text-sm leading-relaxed">Link download langsung, tanpa redirect berlebihan. Dapatkan file mod kamu dalam hitungan detik.</p>
+        <div class="mt-6 text-center">
+            <a
+                href="/category/games"
+                class="inline-flex items-center gap-2 border border-[#68cb5b] text-[#68cb5b] hover:bg-[#68cb5b] hover:text-white font-bold rounded-full px-6 py-2.5 transition-all duration-200 mt-6"
+            >
+                All Games
+                <svg
+                    class="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+            </a>
         </div>
+    </section>
 
-        <!-- Card 3: Always Updated -->
-        <div class="glass glass-hover rounded-2xl p-6 text-neutral-200 transition-all duration-300 animate-on-scroll delay-400">
-          <div class="h-12 w-12 rounded-xl bg-[#68cb5b]/20 flex items-center justify-center mb-4">
-            <svg class="h-6 w-6 text-[#68cb5b]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-            </svg>
-          </div>
-          <h3 class="text-white font-bold text-base mb-2">Always Updated</h3>
-          <p class="text-neutral-400 text-sm leading-relaxed">Mod diupdate setiap ada versi baru. Kamu selalu mendapatkan versi terbaru dan paling stabil.</p>
+    <!-- ============================================ -->
+    <!-- 4. AD PLACEHOLDER                            -->
+    <!-- ============================================ -->
+    <div class="max-w-[1200px] mx-auto px-6 md:px-8 mt-10">
+        <div
+            class="flex items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 py-6 text-xs text-slate-400"
+        >
+            Advertisement
         </div>
-
-      </div>
     </div>
-  </section>
 
+    <!-- ============================================ -->
+    <!-- 5. LATEST APPS SECTION                       -->
+    <!-- ============================================ -->
+    <section class="max-w-[1200px] mx-auto px-6 md:px-8 mt-10">
+        <h2
+            class="text-lg md:text-xl font-bold uppercase tracking-wide text-slate-800 animate-on-scroll"
+        >
+            Latest Apps
+        </h2>
+        <div
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5 mt-5"
+        >
+            {nonGameApps.map((app) => <AppCard app={app} />)}
+        </div>
+        <div class="mt-6 text-center">
+            <a
+                href="/category/apps"
+                class="inline-flex items-center gap-2 border border-[#f77a4c] text-[#f77a4c] hover:bg-[#f77a4c] hover:text-white font-bold rounded-full px-6 py-2.5 transition-all duration-200 mt-6"
+            >
+                All Apps
+                <svg
+                    class="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 6. ABOUT / FEATURES SECTION                  -->
+    <!-- ============================================ -->
+    <section
+        class="relative overflow-hidden bg-gradient-to-b from-[#0a0a0a] to-[#111] py-16 md:py-20 mt-12"
+    >
+        <!-- Background glow -->
+        <div
+            class="absolute left-1/2 top-0 h-96 w-96 -translate-x-1/2 rounded-full bg-[#68cb5b]/10 blur-[120px]"
+            aria-hidden="true"
+        >
+        </div>
+
+        <div class="relative z-10 max-w-[1200px] mx-auto px-6 md:px-8">
+            <!-- Title -->
+            <div class="text-center mb-10 md:mb-14">
+                <h2
+                    class="text-2xl md:text-3xl font-bold text-white animate-on-scroll"
+                >
+                    Why Rrmod?
+                </h2>
+                <p
+                    class="text-neutral-400 mt-3 max-w-md mx-auto text-sm animate-on-scroll delay-100"
+                >
+                    Platform download mod APK terpercaya dengan koleksi
+                    terlengkap dan terupdate.
+                </p>
+            </div>
+
+            <!-- Feature Cards -->
+            <div class="grid gap-5 md:grid-cols-3">
+                <!-- Card 1: Verified Mods -->
+                <div
+                    class="glass glass-hover rounded-2xl p-6 text-neutral-200 transition-all duration-300 animate-on-scroll delay-200"
+                >
+                    <div
+                        class="h-12 w-12 rounded-xl bg-[#68cb5b]/20 flex items-center justify-center mb-4"
+                    >
+                        <svg
+                            class="h-6 w-6 text-[#68cb5b]"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                            ></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-white font-bold text-base mb-2">
+                        Verified Mods
+                    </h3>
+                    <p class="text-neutral-400 text-sm leading-relaxed">
+                        Semua mod diverifikasi dan bebas virus. Keamanan
+                        perangkat kamu adalah prioritas utama kami.
+                    </p>
+                </div>
+
+                <!-- Card 2: Fast Downloads -->
+                <div
+                    class="glass glass-hover rounded-2xl p-6 text-neutral-200 transition-all duration-300 animate-on-scroll delay-300"
+                >
+                    <div
+                        class="h-12 w-12 rounded-xl bg-[#68cb5b]/20 flex items-center justify-center mb-4"
+                    >
+                        <svg
+                            class="h-6 w-6 text-[#68cb5b]"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                            ></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-white font-bold text-base mb-2">
+                        Fast Downloads
+                    </h3>
+                    <p class="text-neutral-400 text-sm leading-relaxed">
+                        Link download langsung, tanpa redirect berlebihan.
+                        Dapatkan file mod kamu dalam hitungan detik.
+                    </p>
+                </div>
+
+                <!-- Card 3: Always Updated -->
+                <div
+                    class="glass glass-hover rounded-2xl p-6 text-neutral-200 transition-all duration-300 animate-on-scroll delay-400"
+                >
+                    <div
+                        class="h-12 w-12 rounded-xl bg-[#68cb5b]/20 flex items-center justify-center mb-4"
+                    >
+                        <svg
+                            class="h-6 w-6 text-[#68cb5b]"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                            ></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-white font-bold text-base mb-2">
+                        Always Updated
+                    </h3>
+                    <p class="text-neutral-400 text-sm leading-relaxed">
+                        Mod diupdate setiap ada versi baru. Kamu selalu
+                        mendapatkan versi terbaru dan paling stabil.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 </BaseLayout>
