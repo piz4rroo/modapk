@@ -4,7 +4,6 @@ interface Props {
     slug: string;
     name: string;
     icon?: string;
-    modInfo: string;
     version: string;
     size: string;
     rating: number;
@@ -14,7 +13,7 @@ interface Props {
 }
 
 const { app } = Astro.props;
-const { slug, name, icon, modInfo, version, size, rating, category, developer } = app;
+const { slug, name, icon, version, size, rating, category, developer } = app;
 
 // Simple filled/empty star approach
 const filledStars = Math.round(rating);

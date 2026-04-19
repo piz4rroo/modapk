@@ -24,7 +24,7 @@ const displayLabel = selectedVersion ? selectedVersion.label : `v${app.version}`
 const downloadUrl = selectedVersion ? selectedVersion.downloadUrl : app.downloadUrl;
 ---
 
-<BaseLayout title={`Download ${app.name} - ModVault`} description={`Download ${app.name} MOD APK ${displayVersion} - ${app.modInfo}`}>
+<BaseLayout title={`Download ${app.name} - ModVault`} description={`Download ${app.name} MOD APK ${displayVersion} - ${app.modFeatures[0] || app.shortDescription}`}>
   <div class="max-w-lg mx-auto px-6 md:px-8 py-16 text-center">
 
     <!-- App Icon with MOD Badge -->

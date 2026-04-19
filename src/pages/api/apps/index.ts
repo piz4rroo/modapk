@@ -40,7 +40,6 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     category: formData.get('category')?.toString() ?? 'games',
     icon: formData.get('icon')?.toString() ?? '',
     version: formData.get('version')?.toString() ?? '',
-    modInfo: formData.get('modInfo')?.toString() ?? '',
     size: formData.get('size')?.toString() ?? '',
     rating: parseFloat(formData.get('rating')?.toString() ?? '0'),
     developer: formData.get('developer')?.toString() ?? '',

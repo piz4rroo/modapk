@@ -17,7 +17,6 @@ export interface App {
   category: string;
   icon: string;
   version: string;
-  modInfo: string;
   size: string;
   rating: number;
   developer: string;
@@ -41,7 +40,6 @@ function toApp(row: any): App {
     category: row.category,
     icon: row.icon || '',
     version: row.version || '',
-    modInfo: row.mod_info || '',
     size: row.size || '',
     rating: parseFloat(row.rating) || 0,
     developer: row.developer || '',
@@ -65,7 +63,6 @@ function toRow(app: Partial<App>): Record<string, any> {
   if (app.category !== undefined) row.category = app.category;
   if (app.icon !== undefined) row.icon = app.icon;
   if (app.version !== undefined) row.version = app.version;
-  if (app.modInfo !== undefined) row.mod_info = app.modInfo;
   if (app.size !== undefined) row.size = app.size;
   if (app.rating !== undefined) row.rating = app.rating;
   if (app.developer !== undefined) row.developer = app.developer;

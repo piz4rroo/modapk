@@ -17,7 +17,6 @@ let app: any = {
   category: 'games',
   icon: '',
   version: '',
-  modInfo: '',
   size: '',
   rating: 4.5,
   developer: '',
@@ -173,13 +172,6 @@ const formAction = isNew ? '/api/apps' : `/api/apps/${slug}`;
           <input type="text" id="requires" name="requires" value={app.requires} placeholder="Android 5.0+"
             class="w-full rounded-xl border border-[#e5e7eb] px-4 py-2.5 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all" />
         </div>
-      </div>
-
-      <!-- Mod Info -->
-      <div class="mt-4">
-        <label for="modInfo" class="block text-[12px] font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5">Mod Info</label>
-        <input type="text" id="modInfo" name="modInfo" value={app.modInfo} placeholder="e.g. Unlimited Gems, Gold & Elixir"
-          class="w-full rounded-xl border border-[#e5e7eb] px-4 py-2.5 text-[13px] text-[#1a1d21] placeholder-[#c4c7cc] focus:outline-none focus:ring-2 focus:ring-[#68cb5b]/30 focus:border-[#68cb5b] transition-all" />
       </div>
 
       <!-- Download URL -->
