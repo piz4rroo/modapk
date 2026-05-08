@@ -1,33 +1,37 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: 'Archivo Black', Impact, sans-serif;
 
   /* Colors */
-  --color-bg-primary: #f4f5f3;
+  --color-bg-primary: #fff7d1;
   --color-bg-card: #ffffff;
-  --color-bg-navbar: #ffffff;
-  --color-bg-hero: #0a0a0a;
-  --color-bg-dark: #0a0a0a;
-  --color-bg-dark-card: rgba(255, 255, 255, 0.05);
+  --color-bg-navbar: #fffbeb;
+  --color-bg-hero: #ffee32;
+  --color-bg-dark: #111111;
+  --color-bg-dark-card: #ffffff;
 
-  --color-text-primary: #151617;
-  --color-text-secondary: #343a40;
-  --color-text-muted: #b2b2b2;
+  --color-text-primary: #101010;
+  --color-text-secondary: #262626;
+  --color-text-muted: #595959;
 
-  --color-green: #68cb5b;
-  --color-green-hover: #5bb84f;
-  --color-green-light: rgba(104, 203, 91, 0.2);
+  --color-green: #22c55e;
+  --color-green-hover: #16a34a;
+  --color-green-light: #bbf7d0;
 
-  --color-orange: #f77a4c;
-  --color-orange-light: rgba(247, 122, 76, 0.2);
+  --color-orange: #ff5a1f;
+  --color-orange-light: #fed7aa;
+  --color-yellow: #ffee32;
+  --color-blue: #38bdf8;
+  --color-pink: #ff4fd8;
 
-  --color-border: #edefec;
-  --color-border-dark: #e2e5e2;
+  --color-border: #101010;
+  --color-border-dark: #101010;
 
-  --shadow-card: 0 .25rem 1.5rem 1px rgba(0, 0, 0, 0.03);
-  --shadow-card-hover: 0 .5rem 2rem 2px rgba(0, 0, 0, 0.08);
-  --shadow-navbar: 0 1px 0 0 rgba(0, 0, 0, 0.05);
+  --shadow-card: 7px 7px 0 #101010;
+  --shadow-card-hover: 10px 10px 0 #101010;
+  --shadow-navbar: 0 5px 0 #101010;
 
   /* Animations */
   --animate-fade-up: fade-up 0.6s ease-out forwards;
@@ -67,6 +71,15 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background:
+      linear-gradient(90deg, rgba(16, 16, 16, 0.05) 1px, transparent 1px),
+      linear-gradient(rgba(16, 16, 16, 0.05) 1px, transparent 1px),
+      var(--color-bg-primary);
+    background-size: 28px 28px;
+  }
+
+  h1, h2, h3, h4 {
+    letter-spacing: 0;
   }
 }
 
@@ -90,23 +103,57 @@
   .delay-500 { transition-delay: 500ms; }
   .delay-600 { transition-delay: 600ms; }
 
-  /* Glassmorphism */
+  /* Neo brutalism */
+  .brutal-card {
+    border: 3px solid #101010;
+    background: #fff;
+    box-shadow: var(--shadow-card);
+  }
+  .brutal-card-hover {
+    transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+  }
+  .brutal-card-hover:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: var(--shadow-card-hover);
+  }
+  .brutal-btn {
+    border: 3px solid #101010;
+    background: var(--color-yellow);
+    color: #101010;
+    box-shadow: 5px 5px 0 #101010;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+  }
+  .brutal-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 8px 8px 0 #101010;
+  }
+  .brutal-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #101010;
+  }
+  .display-font {
+    font-family: var(--font-display);
+  }
+
+  /* Legacy glass class now renders as hard brutal panels */
   .glass {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #ffffff;
+    border: 3px solid #101010;
+    box-shadow: 7px 7px 0 #101010;
   }
   .glass-hover:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: #ffee32;
   }
 
   /* Gradient text */
   .text-gradient {
-    background: linear-gradient(to right, #68cb5b, #ffffff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    background: #ff4fd8;
+    color: #101010;
+    -webkit-text-fill-color: #101010;
+    padding: 0 0.15em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    border: 3px solid #101010;
+    box-shadow: 5px 5px 0 #101010;
   }
 }

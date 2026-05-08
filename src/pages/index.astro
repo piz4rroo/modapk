@@ -18,50 +18,11 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
     <!-- 1. HERO SECTION                              -->
     <!-- ============================================ -->
     <section
-        class="relative isolate overflow-hidden bg-[#0a0a0a] pb-8 pt-20 md:pt-28 md:pb-16"
+        class="relative isolate overflow-hidden border-b-[4px] border-[#101010] bg-[#ffee32] pb-8 pt-20 md:pb-16 md:pt-28"
     >
-        <!-- BG Layer 1: dark green gradient -->
-        <div
-            class="absolute inset-0 bg-gradient-to-b from-[#0f1a0f] to-[#0a0a0a]"
-            aria-hidden="true"
-        >
-        </div>
-
-        <!-- BG Layer 2: glow orb top-center -->
-        <div
-            class="absolute -top-28 left-1/2 h-[36rem] w-[36rem] -translate-x-1/2 rounded-full bg-[#68cb5b]/15 blur-[128px]"
-            aria-hidden="true"
-        >
-        </div>
-
-        <!-- BG Layer 3: SVG grid pattern -->
-        <svg
-            class="absolute inset-0 h-full w-full opacity-[0.07]"
-            aria-hidden="true"
-        >
-            <defs>
-                <pattern
-                    id="grid"
-                    width="40"
-                    height="40"
-                    patternUnits="userSpaceOnUse"
-                >
-                    <path
-                        d="M 40 0 L 0 0 0 40"
-                        fill="none"
-                        stroke="white"
-                        stroke-width="0.5"></path>
-                </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid)"></rect>
-        </svg>
-
-        <!-- BG Layer 4: glow orb right -->
-        <div
-            class="absolute top-1/2 right-0 h-72 w-72 -translate-y-1/2 rounded-full bg-[#f77a4c]/10 blur-[100px]"
-            aria-hidden="true"
-        >
-        </div>
+        <div class="absolute inset-0 opacity-25" aria-hidden="true" style="background-image: radial-gradient(#101010 1.5px, transparent 1.5px); background-size: 18px 18px;"></div>
+        <div class="absolute -right-10 top-20 h-28 w-72 rotate-6 border-[4px] border-[#101010] bg-[#ff4fd8] shadow-[8px_8px_0_#101010]" aria-hidden="true"></div>
+        <div class="absolute -left-12 bottom-10 h-24 w-64 -rotate-6 border-[4px] border-[#101010] bg-[#38bdf8] shadow-[8px_8px_0_#101010]" aria-hidden="true"></div>
 
         <!-- Content -->
         <div class="relative z-10 max-w-[1200px] mx-auto px-6 md:px-8">
@@ -71,15 +32,11 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
                 <!-- Left Column -->
                 <div>
                     <!-- Badge -->
-                    <span
-                        class="inline-flex items-center bg-[#68cb5b]/20 border border-[#68cb5b]/40 text-[#68cb5b] rounded-full px-3 py-1 text-xs font-bold mb-4 animate-on-scroll"
-                    >
-                        Trusted
-                    </span>
+                    <span class="mb-4 inline-flex rotate-[-2deg] items-center border-[3px] border-[#101010] bg-white px-3 py-1 text-xs font-black uppercase text-[#101010] shadow-[4px_4px_0_#101010] animate-on-scroll">Trusted Mods</span>
 
                     <!-- Heading -->
                     <h1
-                        class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white animate-on-scroll delay-100"
+                        class="display-font max-w-xl text-4xl text-[#101010] sm:text-5xl md:text-6xl animate-on-scroll delay-100"
                     >
                         Download <span class="text-gradient">Mod APK</span><br
                         />
@@ -88,7 +45,7 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
 
                     <!-- Description -->
                     <p
-                        class="text-base text-neutral-400 mt-4 max-w-lg animate-on-scroll delay-200"
+                        class="mt-5 max-w-lg border-l-[6px] border-[#101010] bg-white px-4 py-3 text-base font-bold text-[#101010] shadow-[5px_5px_0_#101010] animate-on-scroll delay-200"
                     >
                         Latest and trusted mod APK collection for Android.
                         Unlimited resources, premium unlocked, and much more.
@@ -100,13 +57,13 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
                     >
                         <a
                             href="/category/games"
-                            class="bg-[#68cb5b] hover:bg-[#5bb84f] text-white font-bold rounded-full px-6 py-3 shadow-[0_.5rem_1.5rem_0_rgba(104,203,91,0.3)] transition-all duration-200 hover:shadow-[0_.5rem_2rem_0_rgba(104,203,91,0.4)] hover:-translate-y-0.5"
+                            class="brutal-btn px-6 py-3 font-black uppercase"
                         >
                             Browse Games
                         </a>
                         <a
                             href="/category/apps"
-                            class="border border-white/20 text-white hover:border-white/40 hover:bg-white/5 font-bold rounded-full px-6 py-3 transition-all duration-200"
+                            class="border-[3px] border-[#101010] bg-white px-6 py-3 font-black uppercase text-[#101010] shadow-[5px_5px_0_#101010] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#38bdf8]"
                         >
                             Browse Apps
                         </a>
@@ -117,15 +74,15 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
                         class="flex flex-wrap gap-2 mt-6 animate-on-scroll delay-400"
                     >
                         <span
-                            class="rounded-xl border border-neutral-800/60 bg-neutral-900/40 px-3 py-1.5 text-xs text-neutral-400"
+                            class="border-2 border-[#101010] bg-[#22c55e] px-3 py-1.5 text-xs font-black uppercase text-[#101010]"
                             >Unlimited Coins</span
                         >
                         <span
-                            class="rounded-xl border border-neutral-800/60 bg-neutral-900/40 px-3 py-1.5 text-xs text-neutral-400"
+                            class="border-2 border-[#101010] bg-[#ff4fd8] px-3 py-1.5 text-xs font-black uppercase text-[#101010]"
                             >Premium Unlocked</span
                         >
                         <span
-                            class="rounded-xl border border-neutral-800/60 bg-neutral-900/40 px-3 py-1.5 text-xs text-neutral-400"
+                            class="border-2 border-[#101010] bg-[#38bdf8] px-3 py-1.5 text-xs font-black uppercase text-[#101010]"
                             >Ad-Free</span
                         >
                     </div>
@@ -135,15 +92,15 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
                 <div class="hidden md:block relative h-[380px]">
                     <!-- Card 1: Top Game -->
                     <div
-                        class="absolute top-8 right-4 z-20 w-48 md:w-56 rounded-2xl glass p-4 shadow-2xl animate-on-scroll delay-200"
+                        class="absolute top-8 right-4 z-20 w-48 rotate-[-3deg] border-[3px] border-[#101010] bg-white p-4 shadow-[8px_8px_0_#101010] animate-on-scroll delay-200 md:w-56"
                         style="--float-rotate: -3deg; animation: float 6s ease-in-out infinite;"
                     >
                         <div class="flex items-center gap-3 mb-3">
                             <div
-                                class="h-10 w-10 rounded-xl bg-[#68cb5b]/20 flex items-center justify-center shrink-0"
+                                class="flex h-10 w-10 shrink-0 items-center justify-center border-2 border-[#101010] bg-[#22c55e]"
                             >
                                 <svg
-                                    class="h-5 w-5 text-[#68cb5b]"
+                                    class="h-5 w-5 text-[#101010]"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -163,18 +120,18 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
                             </div>
                             <div>
                                 <p
-                                    class="text-white text-sm font-bold leading-tight"
+                                    class="text-sm font-black leading-tight text-[#101010]"
                                 >
                                     Clash of Clans
                                 </p>
                                 <p
-                                    class="text-[#68cb5b] text-[10px] font-bold mt-0.5"
+                                    class="mt-0.5 inline-block bg-[#ffee32] text-[10px] font-black text-[#101010]"
                                 >
                                     TOP GAME
                                 </p>
                             </div>
                         </div>
-                        <p class="text-neutral-400 text-xs">
+                        <p class="text-xs font-bold text-[#595959]">
                             MOD: Unlimited Gems
                         </p>
                         <div class="flex items-center gap-1 mt-2">
@@ -218,7 +175,7 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
                                 ></path></svg
                             >
-                            <span class="text-neutral-500 text-[10px] ml-1"
+                            <span class="ml-1 text-[10px] font-black text-[#101010]"
                                 >4.7</span
                             >
                         </div>
@@ -226,55 +183,51 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
 
                     <!-- Card 2: Category Grid -->
                     <div
-                        class="absolute top-4 left-0 z-10 w-40 md:w-44 rounded-xl glass p-3 shadow-xl animate-on-scroll delay-400"
+                        class="absolute top-4 left-0 z-10 w-40 rotate-[5deg] border-[3px] border-[#101010] bg-[#38bdf8] p-3 shadow-[8px_8px_0_#101010] animate-on-scroll delay-400 md:w-44"
                         style="--float-rotate: 5deg; animation: float 7s ease-in-out 1s infinite;"
                     >
-                        <p class="text-white text-xs font-bold mb-2">
+                        <p class="mb-2 text-xs font-black uppercase text-[#101010]">
                             Categories
                         </p>
                         <div class="grid grid-cols-2 gap-2">
                             <div
-                                class="rounded-lg bg-[#68cb5b]/20 p-2 text-center"
+                                class="border-2 border-[#101010] bg-white p-2 text-center"
                             >
                                 <div
-                                    class="h-5 w-5 mx-auto rounded bg-[#68cb5b]/40 mb-1"
+                                    class="mx-auto mb-1 h-5 w-5 border-2 border-[#101010] bg-[#22c55e]"
                                 >
                                 </div>
-                                <span class="text-[9px] text-neutral-300"
-                                    >Games</span
+                                <span class="text-[9px] font-black text-[#101010]">Games</span
                                 >
                             </div>
                             <div
-                                class="rounded-lg bg-blue-500/20 p-2 text-center"
+                                class="border-2 border-[#101010] bg-white p-2 text-center"
                             >
                                 <div
-                                    class="h-5 w-5 mx-auto rounded bg-blue-500/40 mb-1"
+                                    class="mx-auto mb-1 h-5 w-5 border-2 border-[#101010] bg-[#38bdf8]"
                                 >
                                 </div>
-                                <span class="text-[9px] text-neutral-300"
-                                    >Apps</span
+                                <span class="text-[9px] font-black text-[#101010]">Apps</span
                                 >
                             </div>
                             <div
-                                class="rounded-lg bg-[#f77a4c]/20 p-2 text-center"
+                                class="border-2 border-[#101010] bg-white p-2 text-center"
                             >
                                 <div
-                                    class="h-5 w-5 mx-auto rounded bg-[#f77a4c]/40 mb-1"
+                                    class="mx-auto mb-1 h-5 w-5 border-2 border-[#101010] bg-[#ff5a1f]"
                                 >
                                 </div>
-                                <span class="text-[9px] text-neutral-300"
-                                    >Tools</span
+                                <span class="text-[9px] font-black text-[#101010]">Tools</span
                                 >
                             </div>
                             <div
-                                class="rounded-lg bg-purple-500/20 p-2 text-center"
+                                class="border-2 border-[#101010] bg-white p-2 text-center"
                             >
                                 <div
-                                    class="h-5 w-5 mx-auto rounded bg-purple-500/40 mb-1"
+                                    class="mx-auto mb-1 h-5 w-5 border-2 border-[#101010] bg-[#ff4fd8]"
                                 >
                                 </div>
-                                <span class="text-[9px] text-neutral-300"
-                                    >Social</span
+                                <span class="text-[9px] font-black text-[#101010]">Social</span
                                 >
                             </div>
                         </div>
@@ -282,18 +235,18 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
 
                     <!-- Card 3: Stats -->
                     <div
-                        class="absolute bottom-4 left-6 z-[15] w-36 md:w-40 rounded-xl glass p-3 animate-on-scroll delay-500"
+                        class="absolute bottom-4 left-6 z-[15] w-36 rotate-[-5deg] border-[3px] border-[#101010] bg-[#ff4fd8] p-3 shadow-[8px_8px_0_#101010] animate-on-scroll delay-500 md:w-40"
                         style="--float-rotate: -5deg; animation: float 8s ease-in-out 2s infinite;"
                     >
-                        <p class="text-white text-xs font-bold">8+ Apps</p>
-                        <p class="text-neutral-500 text-[10px] mt-1">
+                        <p class="text-xs font-black text-[#101010]">8+ Apps</p>
+                        <p class="mt-1 text-[10px] font-bold text-[#101010]">
                             Available now
                         </p>
                         <div
-                            class="mt-2 h-1.5 w-full rounded-full bg-neutral-800 overflow-hidden"
+                            class="mt-2 h-2 w-full overflow-hidden border-2 border-[#101010] bg-white"
                         >
                             <div
-                                class="h-full w-3/4 rounded-full bg-gradient-to-r from-[#68cb5b] to-[#68cb5b]/60"
+                                class="h-full w-3/4 bg-[#ffee32]"
                             >
                             </div>
                         </div>
@@ -331,9 +284,7 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
     <!-- 3. LATEST GAMES SECTION                      -->
     <!-- ============================================ -->
     <section class="max-w-[1200px] mx-auto px-6 md:px-8 mt-10 md:mt-14">
-        <h2
-            class="text-lg md:text-xl font-bold uppercase tracking-wide text-slate-800 animate-on-scroll"
-        >
+        <h2 class="display-font inline-block rotate-[-1deg] border-[3px] border-[#101010] bg-[#22c55e] px-4 py-2 text-lg uppercase text-[#101010] shadow-[5px_5px_0_#101010] animate-on-scroll md:text-xl">
             Latest Games
         </h2>
         <div
@@ -344,7 +295,7 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
         <div class="mt-6 text-center">
             <a
                 href="/category/games"
-                class="inline-flex items-center gap-2 border border-[#68cb5b] text-[#68cb5b] hover:bg-[#68cb5b] hover:text-white font-bold rounded-full px-6 py-2.5 transition-all duration-200 mt-6"
+                class="brutal-btn mt-6 inline-flex items-center gap-2 px-6 py-2.5 font-black uppercase"
             >
                 All Games
                 <svg
@@ -368,7 +319,7 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
     <!-- ============================================ -->
     <div class="max-w-[1200px] mx-auto px-6 md:px-8 mt-10">
         <div
-            class="flex items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 py-6 text-xs text-slate-400"
+            class="flex items-center justify-center border-[3px] border-dashed border-[#101010] bg-white py-6 text-xs font-black uppercase text-[#595959] shadow-[5px_5px_0_#101010]"
         >
             Advertisement
         </div>
@@ -378,9 +329,7 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
     <!-- 5. LATEST APPS SECTION                       -->
     <!-- ============================================ -->
     <section class="max-w-[1200px] mx-auto px-6 md:px-8 mt-10">
-        <h2
-            class="text-lg md:text-xl font-bold uppercase tracking-wide text-slate-800 animate-on-scroll"
-        >
+        <h2 class="display-font inline-block rotate-[1deg] border-[3px] border-[#101010] bg-[#ff5a1f] px-4 py-2 text-lg uppercase text-[#101010] shadow-[5px_5px_0_#101010] animate-on-scroll md:text-xl">
             Latest Apps
         </h2>
         <div
@@ -391,7 +340,7 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
         <div class="mt-6 text-center">
             <a
                 href="/category/apps"
-                class="inline-flex items-center gap-2 border border-[#f77a4c] text-[#f77a4c] hover:bg-[#f77a4c] hover:text-white font-bold rounded-full px-6 py-2.5 transition-all duration-200 mt-6"
+                class="mt-6 inline-flex items-center gap-2 border-[3px] border-[#101010] bg-[#38bdf8] px-6 py-2.5 font-black uppercase text-[#101010] shadow-[5px_5px_0_#101010] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#ff4fd8]"
             >
                 All Apps
                 <svg
@@ -414,25 +363,18 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
     <!-- 6. ABOUT / FEATURES SECTION                  -->
     <!-- ============================================ -->
     <section
-        class="relative overflow-hidden bg-gradient-to-b from-[#0a0a0a] to-[#111] py-16 md:py-20 mt-12"
+        class="relative mt-12 overflow-hidden border-t-[4px] border-[#101010] bg-[#101010] py-16 md:py-20"
     >
-        <!-- Background glow -->
-        <div
-            class="absolute left-1/2 top-0 h-96 w-96 -translate-x-1/2 rounded-full bg-[#68cb5b]/10 blur-[120px]"
-            aria-hidden="true"
-        >
-        </div>
+        <div class="absolute inset-0 opacity-20" aria-hidden="true" style="background-image: linear-gradient(45deg, #ffee32 25%, transparent 25%, transparent 50%, #ffee32 50%, #ffee32 75%, transparent 75%, transparent); background-size: 32px 32px;"></div>
 
         <div class="relative z-10 max-w-[1200px] mx-auto px-6 md:px-8">
             <!-- Title -->
             <div class="text-center mb-10 md:mb-14">
-                <h2
-                    class="text-2xl md:text-3xl font-bold text-white animate-on-scroll"
-                >
+                <h2 class="display-font text-3xl text-white animate-on-scroll md:text-4xl">
                     Why Rrmod?
                 </h2>
                 <p
-                    class="text-neutral-400 mt-3 max-w-md mx-auto text-sm animate-on-scroll delay-100"
+                    class="mx-auto mt-3 max-w-md border-[3px] border-white bg-[#ffee32] px-4 py-3 text-sm font-black text-[#101010] shadow-[6px_6px_0_white] animate-on-scroll delay-100"
                 >
                     Trusted mod APK download platform with collection most
                     complete and updated.
@@ -443,13 +385,13 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
             <div class="grid gap-5 md:grid-cols-3">
                 <!-- Card 1: Verified Mods -->
                 <div
-                    class="glass glass-hover rounded-2xl p-6 text-neutral-200 transition-all duration-300 animate-on-scroll delay-200"
+                    class="border-[3px] border-white bg-white p-6 text-[#101010] shadow-[7px_7px_0_#ffee32] transition-all duration-300 hover:-translate-y-1 animate-on-scroll delay-200"
                 >
                     <div
-                        class="h-12 w-12 rounded-xl bg-[#68cb5b]/20 flex items-center justify-center mb-4"
+                        class="mb-4 flex h-12 w-12 items-center justify-center border-2 border-[#101010] bg-[#22c55e]"
                     >
                         <svg
-                            class="h-6 w-6 text-[#68cb5b]"
+                            class="h-6 w-6 text-[#101010]"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -462,10 +404,10 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
                             ></path>
                         </svg>
                     </div>
-                    <h3 class="text-white font-bold text-base mb-2">
+                    <h3 class="mb-2 text-base font-black text-[#101010]">
                         Verified Mods
                     </h3>
-                    <p class="text-neutral-400 text-sm leading-relaxed">
+                    <p class="text-sm font-bold leading-relaxed text-[#343a40]">
                         All mods are verified and virus free. Security Your
                         device is our top priority.
                     </p>
@@ -473,13 +415,13 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
 
                 <!-- Card 2: Fast Downloads -->
                 <div
-                    class="glass glass-hover rounded-2xl p-6 text-neutral-200 transition-all duration-300 animate-on-scroll delay-300"
+                    class="border-[3px] border-white bg-white p-6 text-[#101010] shadow-[7px_7px_0_#38bdf8] transition-all duration-300 hover:-translate-y-1 animate-on-scroll delay-300"
                 >
                     <div
-                        class="h-12 w-12 rounded-xl bg-[#68cb5b]/20 flex items-center justify-center mb-4"
+                        class="mb-4 flex h-12 w-12 items-center justify-center border-2 border-[#101010] bg-[#38bdf8]"
                     >
                         <svg
-                            class="h-6 w-6 text-[#68cb5b]"
+                            class="h-6 w-6 text-[#101010]"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -492,10 +434,10 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
                             ></path>
                         </svg>
                     </div>
-                    <h3 class="text-white font-bold text-base mb-2">
+                    <h3 class="mb-2 text-base font-black text-[#101010]">
                         Fast Downloads
                     </h3>
-                    <p class="text-neutral-400 text-sm leading-relaxed">
+                    <p class="text-sm font-bold leading-relaxed text-[#343a40]">
                         Direct download link, without excessive redirects. Get
                         your mod files in seconds.
                     </p>
@@ -503,13 +445,13 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
 
                 <!-- Card 3: Always Updated -->
                 <div
-                    class="glass glass-hover rounded-2xl p-6 text-neutral-200 transition-all duration-300 animate-on-scroll delay-400"
+                    class="border-[3px] border-white bg-white p-6 text-[#101010] shadow-[7px_7px_0_#ff4fd8] transition-all duration-300 hover:-translate-y-1 animate-on-scroll delay-400"
                 >
                     <div
-                        class="h-12 w-12 rounded-xl bg-[#68cb5b]/20 flex items-center justify-center mb-4"
+                        class="mb-4 flex h-12 w-12 items-center justify-center border-2 border-[#101010] bg-[#ff4fd8]"
                     >
                         <svg
-                            class="h-6 w-6 text-[#68cb5b]"
+                            class="h-6 w-6 text-[#101010]"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -522,10 +464,10 @@ const nonGameApps = allApps.filter((app) => app.category !== "games");
                             ></path>
                         </svg>
                     </div>
-                    <h3 class="text-white font-bold text-base mb-2">
+                    <h3 class="mb-2 text-base font-black text-[#101010]">
                         Always Updated
                     </h3>
-                    <p class="text-neutral-400 text-sm leading-relaxed">
+                    <p class="text-sm font-bold leading-relaxed text-[#343a40]">
                         Mods are updated whenever a new version is released. You
                         always get the latest and most stable version.
                     </p>

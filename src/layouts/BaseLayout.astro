@@ -34,10 +34,10 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astr
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:image" content="/icon.png" />
 
-    <!-- Fonts: Montserrat 400,700 -->
+    <!-- Fonts: neo brutal display + readable body -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet" />
     
     <!-- Ads Script -->
     <script src="https://pl29189049.profitablecpmratenetwork.com/9a/c7/c7/9ac7c78e6fd0501281689fccbe6d3e9c.js"></script>
@@ -45,7 +45,7 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astr
     <!-- Native Banner Ads Script -->
     <script async="async" data-cfasync="false" src="https://pl29189214.profitablecpmratenetwork.com/277c3f7609d0edad3677cb15f54f63c6/invoke.js"></script>
   </head>
-  <body class="flex flex-col min-h-screen bg-[#f4f5f3] text-[#151617]">
+  <body class="flex flex-col min-h-screen bg-[#fff7d1] text-[#101010]">
     <Navbar />
     <main class="flex-1 pt-16 md:pt-20">
       <slot />

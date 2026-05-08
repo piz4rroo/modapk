@@ -21,10 +21,10 @@ const categories = [
       <a
         href={cat.href}
         class:list={[
-          "shrink-0 rounded-full px-5 py-2 text-sm font-bold transition-colors duration-150",
+          "shrink-0 border-[3px] border-[#101010] px-5 py-2 text-sm font-black uppercase text-[#101010] shadow-[4px_4px_0_#101010] transition-all duration-150 hover:-translate-y-0.5",
           isActive
-            ? "bg-[#68cb5b] text-white shadow-[0_.25rem_1rem_0_rgba(104,203,91,0.2)]"
-            : "bg-[#edefec] text-[#343a40] hover:bg-[#e2e5e2]",
+            ? "bg-[#ffee32]"
+            : "bg-white hover:bg-[#ff4fd8]",
         ]}
         aria-current={isActive ? "page" : undefined}
       >
