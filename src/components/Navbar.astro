@@ -107,27 +107,6 @@ function isActive(href: string): boolean {
                 <span class:list={["absolute -bottom-2 h-1 bg-[#101010] transition-all duration-200", isActive("/category/tools") ? "w-full" : "w-0 group-hover:w-full"]}></span>
             </a>
 
-            <!-- Search button -->
-            <button
-                id="search-btn"
-                class="ml-2 border-2 border-[#101010] bg-white p-2 text-[#101010] shadow-[3px_3px_0_#101010] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#ffee32]"
-                aria-label="Search"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-5 h-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M21 21l-4.35-4.35"></path>
-                </svg>
-            </button>
         </div>
 
         <!-- Mobile hamburger -->
@@ -247,13 +226,6 @@ function isActive(href: string): boolean {
             <span class="text-[15px] font-bold">Tools</span>
         </a>
 
-        <!-- Search -->
-        <a
-            href="/#search"
-            class="group flex items-center gap-4 px-6 py-3.5 text-[#101010] transition-all duration-200 hover:bg-[#ff4fd8] hover:pl-8"
-        >
-            <span class="text-[15px] font-bold">Search</span>
-        </a>
     </div>
 </div>
 
